@@ -23,7 +23,7 @@ const router = new Router({
     // app
     {
       path: '/',
-      component: BasicLayout,
+      component: BasicLayout, //实现跨子层的组件
       children: [
         // dashboard
         { path: '/', redirect: '/dashboard/analysis' },
@@ -37,108 +37,36 @@ const router = new Router({
             { path: '/dashboard/workplace', name: 'workplace', component: () => import('@/views/Dashboard/Workplace') },
           ]
         },
-        // {
-        //   path: '/form',
-        //   name: 'form',
-        //   icon: 'form',
-        //   component: BlankLayout,
-        //   children: [
-        //     { path: '/form/basic-form', name: 'basicform', component: () => import('@/views/Dashboard/Analysis') },
-        //     {
-        //       path: '/form/step-form',
-        //       name: 'stepform',
-        //       component: BlankLayout,
-        //       hideChildrenInMenu: true,
-        //       children: [
-        //         {
-        //           path: '/form/step-form/info',
-        //           name: 'info',
-        //           component: () => import('@/views/Dashboard/Analysis'),
-        //         },
-        //       ]
-        //     },
-        //     { path: '/form/advanced-form', name: 'advancedform', component: () => import('@/views/Dashboard/Analysis') },
-        //   ]
-        // },
-        // {
-        //   path: '/list',
-        //   icon: 'table',
-        //   name: 'list',
-        //   component: BlankLayout,
-        //   children: [
-        //     {
-        //       path: '/list/search',
-        //       name: 'searchlist',
-        //       component: BlankLayout,
-        //       children: [
-        //         {
-        //           path: '/list/search/articles',
-        //           name: 'articles',
-        //         },
-        //         {
-        //           path: '/list/search/projects',
-        //           name: 'projects',
-        //         },
-        //         {
-        //           path: '/list/search/applications',
-        //           name: 'applications',
-        //         },
-        //       ]
-        //     }
-        //   ]
-        // },
-        // {
-        //   path: '/profile',
-        //   icon: 'profile',
-        //   name: 'profile',
-        // },
+		{
+		  path: '/business',
+		  name: 'business',
+		  component: BlankLayout,
+		  children: [
+		    { path: '/business/homework', name: 'homework', component: () => import('@/views/Business/Homework') },
+		    // { path: '/dashboard/monitor', name: 'monitor', component: () => import('@/views/Dashboard/Analysis') },
+		  ]
+		},
         {
           path: '/system',
           name: 'system',
           component: BlankLayout,
           children: [
-            {
-              path: '/system/setting',
-              name: 'setting',
-              component: BlankLayout,
-              children: [
-                {
-                  path: '/system/setting/menu',
-                  name: 'menu',
-                  component: () => import('@/views/System/Menu')
-                },
-                {
-                  path: '/system/setting/module',
-                  name: 'module',
-                  component: () => import('@/views/System/Role')
-                },
-                {
-                  path: '/system/setting/config',
-                  name: 'config',
-                  component: () => import('@/views/System/Role')
-                },
-                {
-                  path: '/system/setting/dict',
-                  name: 'dict',
-                  component: () => import('@/views/System/Role')
-                },
-                {
-                  path: '/system/setting/area',
-                  name: 'area',
-                  component: () => import('@/views/System/Role')
-                },
-              ]
-            },
+			{
+			  path: '/system/journal',
+			  name: 'journal',
+			  component: () => import('@/views/System/Journal')
+			},
+			{
+			  path: '/system/data',
+			  name: 'data',
+			  component: () => import('@/views/System/Data')
+			},
             {
               path: '/system/role',
               name: 'role',
               component: () => import('@/views/System/Role')
             },
-            {
-              path: '/system/admin',
-              name: 'admin',
-              component: () => import('@/views/System/Role')
-            }
+
           ]
         },
       ]

@@ -13,7 +13,7 @@ export default {
   computed: {
     ...mapGetters({
         loading: "global/nav/loading",
-        menuData: "global/nav/getMenuData",
+        menuData: "global/nav/getMenuData", // 获取store中数据 （vuex module）
     }),
     },
   components: {

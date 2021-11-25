@@ -7,28 +7,27 @@ const FooterView = {
             <Footer style={{ padding: 0 }}>
               <GlobalFooter
                 links={[
+					{
+					  key: 'powered by',
+					  title: 'powered by',
+					  blankTarget: true,
+					},
                   {
-                    key: 'Pro 首页',
-                    title: 'Pro 首页',
-                    href: 'https://github.com/ruyangit/seed-workbench-ui.git',
+                    key: 'VUE',
+                    title: 'VUE',
+                    href: 'https://cn.vuejs.org/',
                     blankTarget: true,
                   },
-                  {
-                    key: 'github',
-                    title: <Icon type="github" />,
-                    href: 'https://github.com/ruyangit/seed-workbench-ui.git',
-                    blankTarget: true,
-                  },
-                  {
-                    key: 'Ant Design',
-                    title: 'Ant Design',
-                    href: 'https://ant.design',
-                    blankTarget: true,
-                  },
+				  {
+				    key: 'Ant Design',
+				    title: 'Ant Design',
+				    href: 'https://www.antdv.com/docs/vue/introduce-cn/',
+				    blankTarget: true,
+				  }
                 ]}
                 copyright={
                   <div>
-                    Copyright <Icon type="copyright" /> 2018 Ryan Ru 金服体验技术部出品
+                    Copyright <Icon type="copyright" /> 2021 / YYDS team  /  Advanced Software Engineering course project
                   </div>
                 }
               />
