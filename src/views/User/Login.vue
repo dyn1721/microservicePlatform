@@ -59,15 +59,15 @@
         <a style="float:right;" href="#"> 忘记密码 </a>
       </div>
       <a-form-item>
-        <a-button size="large" class="submit" type="primary" htmlType="submit">
+        <a-button @click.prevent="handleSubmit" size="large" icon='login' class="submit" type="primary" htmlType="submit" >
           登录
         </a-button>
       </a-form-item>
       <div class="other">
-        其他登录方式
+        <!-- 其他登录方式
         <a-icon class="icon" type="alipay-circle" />
         <a-icon class="icon" type="taobao-circle" />
-        <a-icon class="icon" type="weibo-circle" />
+        <a-icon class="icon" type="weibo-circle" /> -->
         <router-link to="/user/register" class="register">注册账户</router-link>
       </div>
     </a-form>
@@ -92,12 +92,15 @@ import { mapGetters } from "vuex";
 export default {
   name: "ai-login",
   data: () => ({
-    activeKey: "2",
+    activeKey: "1",
     active: [],
     submitting: false,
     autoLogin: false,
     start: false
   }),
+  computed: {
+        ...mapGetters({autoLoginKey: "global/AutoLoginChecking"}),
+      },
   components: {
     AForm: Form,
     AFormItem: Form.Item,
@@ -118,6 +121,7 @@ export default {
     onSwitchTab(key) {
       this.active = [];
       if (key === "1") {
+		console.log('1')
         this.active.push("username");
         this.active.push("password");
       } else {
@@ -133,8 +137,27 @@ export default {
         },
         (err, values) => {
           if (!err) {
+			//不知道为啥values失效- -
+			values=this.form.getFieldsValue()
             // console.log("Received values of form: ", values);
-            this.$router.push({path:'/'})
+			// interface check: 检查账号密码（）
+			var check=0
+			//simulate
+			if (values['username']==='test' && values['password']==='123'){check=1}
+			if (check==1){
+				if (this.autoLogin){
+					// 本地存储自动登录密钥 时间戳+随机数
+					var timestamp = (new Date()).valueOf()+''
+					var randomAdd = parseInt(Math.random()*10000)
+					console.log(timestamp+randomAdd)
+					//  interface check: 自动登录密钥提交服务器(timestamp+randomAdd) 
+					//simulate
+					localStorage.setItem("username", values['username']);
+					localStorage.setItem("autoLoginKey", timestamp+randomAdd);	
+					}
+				this.$store.commit('global/AutoLoginChecking', true)   // this作用域？？
+				this.$router.push({path:'/dashboard'})
+				}
           }
         }
       );
@@ -156,8 +179,19 @@ export default {
       });
     }
   },
-  mounted() {
+  mounted() {	
+	console.log("autoLoginChecking")
+	// console.log(this.$store.state.global.autoLoginChecked)
+	var loadAutoKey = localStorage.getItem("autoLoginKey")
+	var username=localStorage.getItem("username")
+	if (loadAutoKey!= undefined){
+		//interface check: 自动登录密钥检查(username,loadAutoKey) 
+		//simulate
+		this.$store.commit('global/AutoLoginChecking', true)
+		this.$router.push({path:'/dashboard'})
+	}
     this.onSwitchTab();
+	
   }
 };
 </script>

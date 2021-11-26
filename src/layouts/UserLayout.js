@@ -12,11 +12,11 @@ const UserLayout = {
             <div class="header">
               <img alt="logo" class="logo" src={this.logo} />
               <span class="title">
-                Ant Design
+                MICRO UNITE
               </span>
             </div>
             <div class="desc">
-              Ant Design 是西湖区最具影响力的 Web 设计规范
+              基于微服务架构的便捷开发平台
             </div>
           </div>
           <router-view />

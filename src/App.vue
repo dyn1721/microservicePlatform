@@ -14,6 +14,9 @@ export default {
     locale() {
       return this.$i18n.messages[this.$i18n.locale];
     }
+  },
+   mounted() {
+	 
   }
 };
 </script>

@@ -26,7 +26,7 @@ const router = new Router({
       component: BasicLayout, //实现跨子层的组件
       children: [
         // dashboard
-        { path: '/', redirect: '/dashboard/analysis' },
+        { path: '/', redirect: '/user/login' },
         {
           path: '/dashboard',
           name: 'dashboard',

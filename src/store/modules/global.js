@@ -1,7 +1,8 @@
 const state = {
     defaultSettings: {},
     BasicLayoutSpinning: true,
-    ChangeLayoutCollapsed: false
+    ChangeLayoutCollapsed: false,
+	autoLoginChecked:false
 }
 //dispatch
 const actions = {
@@ -29,6 +30,9 @@ const actions = {
 }
 //commit
 const mutations = {
+	['AutoLoginChecking'](state, payload) {
+	    state.autoLoginChecked = payload
+	},
     ['UpdateBasicLayoutSpinning'](state, payload) {
         state.BasicLayoutSpinning = payload
     },
@@ -52,6 +56,9 @@ const mutations = {
 }
 
 const getters = {
+	['AutoLoginChecking'](state) {
+	    return state.autoLoginChecked
+	},
     ['settings'](state) {
         return state.defaultSettings
     },

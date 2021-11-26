@@ -39,6 +39,7 @@ const BasicLayout = {
     },
     computed: {
         ...mapGetters({
+			autoLoginKey: "global/AutoLoginChecking",
             collapsed: "global/getChangeLayoutCollapsed",
             settings: "global/settings",
             breadcrumbNameMap: "global/nav/getBreadcrumbNameMap",
@@ -64,6 +65,9 @@ const BasicLayout = {
         })
     },
     mounted() {
+		if (this.autoLoginKey==false){
+			window.location.href='/';
+		}
         this.$store.dispatch('global/nav/getMenuNav');
 
         this.onResizeCollapsed()
