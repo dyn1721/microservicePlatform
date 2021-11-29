@@ -1,10 +1,10 @@
 <template>
     <div :class="className">
-        <a-tooltip title="使用文档" placement="bottom">
+      <!--  <a-tooltip title="使用文档" placement="bottom">
             <a target="_blank" href="javascript:;" class="action" @click="success">
                 <a-icon type="question-circle-o" />
             </a>
-        </a-tooltip>
+        </a-tooltip> -->
         <!-- <a-tooltip title="Code" placement="bottom"> -->
             <!-- <a target="_blank" href="https://github.com/ruyangit/seed-workbench-ui.git" class="action"> -->
             <!-- <span class="action"> -->
@@ -12,27 +12,8 @@
             <!-- </span> -->
             <!-- </a> -->
         <!-- </a-tooltip> -->
-        <a-dropdown placement="bottomRight" >
-            <span class="action">
-               <a-icon type="codepen" theme="outlined" />
-            </span>
-
-            <a-menu slot="overlay" @click="handleMenuClick">
-                <a-menu-item key="gitee">
-                    <!-- <a target="_blank" href="https://github.com/ruyangit/seed-workbench-ui.git"> -->
-                    <a-icon type="slack-square" theme="outlined" />
-                    Gitee （开源中国）
-                    <!-- </a> -->
-                </a-menu-item>
-                <a-menu-item key="github">
-                    <!-- <a target="_blank" href="https://github.com/ruyangit/seed-workbench-ui.git"> -->
-                    <a-icon type="github"/>
-                    Github （同性交友）
-                    <!-- </a> -->
-                </a-menu-item>
-            </a-menu>
-          </a-dropdown>
-        <a-notice-icon 
+   
+       <!-- <a-notice-icon 
             class="ai-notice"
             className="action"
             :count="8"
@@ -100,10 +81,11 @@
             emptyText="你已完成所有待办"
             emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
             />
-        </a-notice-icon>
+        </a-notice-icon> -->
+		
         <a-tooltip :title="$t('navbar.lang')" placement="bottom">
             <a href="javascript:;" class="action" @click='changeLang'>
-                <a-icon type="api" />
+                <a-icon type="pushpin" />
             </a>
         </a-tooltip>
         
@@ -115,7 +97,7 @@
                 src='https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'
                 alt="avatar"
               />
-              <span class="name">Ryan Ru</span>
+              <span class="name">{{username}}</span>
             </span>
 
             <a-menu slot="overlay" class="menu">
@@ -127,13 +109,13 @@
                     <a-icon type="setting"/>
                     {{$t('menu.account.settings')}}
                 </a-menu-item>
-                <a-menu-item key="triggerError">
+               <!-- <a-menu-item key="triggerError">
                     <a-icon type="close-circle-o" />
                     {{$t('menu.account.trigger')}}
-                </a-menu-item>
+                </a-menu-item> -->
                 
                 <a-menu-divider/>
-                <a-menu-item key="logout">
+                <a-menu-item @click='logOut' key="logout">
                     <a-icon type="logout"/>
                     退出登录
                 </a-menu-item>
@@ -149,6 +131,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { Tooltip, Icon, Dropdown, Menu, Avatar, Modal, Divider } from "ant-design-vue";
 import NoticeIcon from "@/components/NoticeIcon"
 import SettingDrawer from "@/components/SettingDrawer"
@@ -172,15 +155,13 @@ export default {
   },
   props:["theme","layout"],
   methods: {
+	logOut(){
+		localStorage.removeItem('username')
+		localStorage.removeItem('autoLoginKey')
+		this.$router.push({path:'/'})
+	},
     changeLang() {
       this.$i18n.locale = this.$i18n.locale === "en_US" ? "zh_CN" : "en_US";
-    },
-    handleMenuClick(e){
-       if(e.key==='gitee'){
-           window.open('https://gitee.com/ruyangit/seed-workbench-ui.git','_blank')
-       }else{
-           window.open('https://github.com/ruyangit/seed-workbench-ui.git','_blank')
-       }
     },
     success() {
       Modal.success({
@@ -196,6 +177,7 @@ export default {
     },
   },
   computed:{
+      ...mapGetters({username: "global/getUserName"}),
       className(){
         let className = 'ai-header-right';
         if (this.theme === 'dark' && this.layout==='topmenu') {
@@ -203,6 +185,9 @@ export default {
         }
         return className;
       }
+  },
+  mounted() {
+  	// console.log(this.username)
   }
 };
 </script>

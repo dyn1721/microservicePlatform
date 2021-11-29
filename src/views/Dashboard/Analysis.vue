@@ -73,7 +73,7 @@
         </a-chart-card>
       </a-col>
     </a-row>
-    <a-card :loading="loading" :bordered="false" :bodyStyle="{padding:'0px'}">
+         <a-card :loading="loading" :bordered="false" :bodyStyle="{padding:'0px'}">
         <div class="salesCard">
           <a-tabs size="large" :tabBarStyle="{marginBottom: '24px',paddingLeft:'16px'}">
             <div slot="tabBarExtraContent" class="salesExtraWrap">

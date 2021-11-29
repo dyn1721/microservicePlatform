@@ -23,27 +23,7 @@
             <a-tab-pane key="myList" :tab="$t('business.homework.myList')">
 
 				<a-row>
-				      <a-col v-for="(item,i) in listData" :key="i" :span="6" style="height: 300px;">
-						  <a @click="routeCourseInfo(item.courseId)" >
-						  <a-card  hoverable style="width: 99%;height: 88%;" > <!-- style="width: 2400px;height: 2400px;" -->
-						        <img
-						          slot="cover"
-						          alt="example"
-						          :src="item.coverPic"
-						        />
-									<p class="courseTitle0">{{item.courseName}}</p>
-									<!--  <template slot="actions" class="ant-card-actions">
-									     <a-icon key="setting" type="setting" />
-									     <a-icon key="edit" type="edit" />
-									     <a-icon key="ellipsis" type="ellipsis" />
-									   </template>
-									     <a-avatar
-									       slot="avatar"
-									       src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-									     /> -->			
-						  	</a-card>
-							</a>
-				      </a-col>
+				     
 				</a-row>
              
            
@@ -167,7 +147,8 @@ export default {
           ...mapGetters({username: "global/loginUserName"}),
         },
   mounted() {
-  	console.log('geter!')
+	  console.log(this.$route.query.courseid)
+	this.$message.success(this.$route.query.courseid);
   }
 };
 </script>

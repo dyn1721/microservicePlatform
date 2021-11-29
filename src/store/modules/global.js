@@ -2,7 +2,8 @@ const state = {
     defaultSettings: {},
     BasicLayoutSpinning: true,
     ChangeLayoutCollapsed: false,
-	autoLoginChecked:false
+	autoLoginChecked:false,
+	loginUserName:null,
 }
 //dispatch
 const actions = {
@@ -30,6 +31,9 @@ const actions = {
 }
 //commit
 const mutations = {
+	['updateUsername'](state, payload) {
+	    state.loginUserName = payload
+	},
 	['AutoLoginChecking'](state, payload) {
 	    state.autoLoginChecked = payload
 	},
@@ -58,6 +62,9 @@ const mutations = {
 const getters = {
 	['AutoLoginChecking'](state) {
 	    return state.autoLoginChecked
+	},
+	['getUserName'](state) {
+	    return state.loginUserName
 	},
     ['settings'](state) {
         return state.defaultSettings

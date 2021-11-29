@@ -155,6 +155,7 @@ export default {
 					localStorage.setItem("username", values['username']);
 					localStorage.setItem("autoLoginKey", timestamp+randomAdd);	
 					}
+				this.$store.commit('global/updateUsername', values['username'])
 				this.$store.commit('global/AutoLoginChecking', true)   
 				this.$router.push({path:'/dashboard'})
 				}
@@ -193,6 +194,7 @@ export default {
 	if (loadAutoKey!= undefined){
 		//interface check: 自动登录密钥检查(username,loadAutoKey) 
 		//simulate
+		this.$store.commit('global/updateUsername', username)
 		this.$store.commit('global/AutoLoginChecking', true)
 		this.$router.push({path:'/dashboard'})
 	}

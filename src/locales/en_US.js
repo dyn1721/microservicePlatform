@@ -40,6 +40,8 @@ export default {
   //业务模块
   'menu.business': 'Business',
   'menu.business.homework': 'Homework',
+  'business.homework.createNew':'crate course',
+  'business.homework.myList':'my courses',
   //---
   'menu.system': 'Management',
   'menu.system.setting': 'Setiings',
