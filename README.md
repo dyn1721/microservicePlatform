@@ -1,6 +1,26 @@
 # microservicePlatform-front
  高等软工项目
 
+#### 需要的接口
+##### 登录/注册
+- 自动登录密钥提交服务器保存(autoLoginKey:String)
+ - 自动登录会向服务器查询这个密钥和本地密钥比对，符合就无需密码登录（避免使用极不安全的cookie） 每个user保存一个该属性
+ - 返回true表示成功保存来回调
+
+- 自动登录密钥检查(username:String,loadAutoKey:String)
+ - 用户勾选自动登录后以后访问首先发送该请求，检查该用户对应的密钥字段是否正确，保证登录的安全性
+ - 返回true false就行
+
+- 检查账号密码 (username:String, password: String)
+ - 登录时请求 
+ - 返回true false就行 （暂时没考虑检查账户是否存在这种细分错误）
+
+- 注册(username:String,password:String)
+ - 没啥好说的 你懂的 创个新user
+ - 返回true表示成功保存来回调 false表示用户名重复
+
+
+
 #### 软件架构
 * [vue/cli3](https://cli.vuejs.org)
 * vue 2.5.17 
@@ -12,6 +32,8 @@
 * axios 0.18.0
 * [ant-design-vue 1.1.2 组件库](https://vuecomponent.github.io/ant-design-vue)
 * [antv/g2 3.2.7 图表库](http://g2.alipay.com/)
+
+
 
 
 #### 安装教程

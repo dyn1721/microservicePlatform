@@ -8,7 +8,7 @@
             fieldDecoratorId="username"
             :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入用户名!' }]}"
             >
-            <a-input placeholder="用户名" size="large">
+            <a-input placeholder="用户名/邮箱" size="large">
               <a-icon type="user" style="color:rgba(0,0,0,.25)" />
             </a-input>
           </a-form-item>
@@ -155,9 +155,15 @@ export default {
 					localStorage.setItem("username", values['username']);
 					localStorage.setItem("autoLoginKey", timestamp+randomAdd);	
 					}
-				this.$store.commit('global/AutoLoginChecking', true)   // this作用域？？
+				this.$store.commit('global/AutoLoginChecking', true)   
 				this.$router.push({path:'/dashboard'})
 				}
+			else{
+				this.$message.error('登录检查失败 请重新输入正确的用户名和密码！');
+				this.form.setFieldsValue({
+					password:''
+				});
+			}
           }
         }
       );
