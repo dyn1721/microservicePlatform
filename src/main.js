@@ -7,8 +7,18 @@ import { sync } from 'vuex-router-sync'
 import zh_CN from "./locales/zh_CN";
 import en_US from "./locales/en_US";
 import defaultSettings from './defaultSettings'
-
+import iView from 'iview';
+import 'iview/dist/styles/iview.css'; 
+Vue.use(iView);
 Vue.config.productionTip = false
+
+import { message} from 'ant-design-vue'
+Vue.prototype.$message = message;
+message.config({
+    duration: 2,// 持续时间
+    top:`100px`, // 到页面顶部距离
+    maxCount: 3 // 最大显示数, 超过限制时，最早的消息会被自动关闭
+});
 
 Vue.use(Vuei18n)
 

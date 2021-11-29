@@ -32,7 +32,7 @@
                                             ]}">
                 <a-input type="password" placeholder="确认密码" size="large" />
             </a-form-item>
-            <a-form-item fieldDecoratorId="mobile" :fieldDecoratorOptions="{rules: [
+           <!-- <a-form-item fieldDecoratorId="mobile" :fieldDecoratorOptions="{rules: [
                                             { required: true, message: '请输入手机号！' },
                                             { pattern: /^1\d{10}$/, message: '手机号格式错误！' },
                                             ]}">
@@ -52,7 +52,7 @@
                         <a-send-captcha-button v-model="start" @click="send" :second="120" class="getCaptcha"  storageKey="SendCaptchaStorageRegisterKey" size="large" />
                     </a-col>
                 </a-row>
-            </a-form-item>
+            </a-form-item> -->
             <a-form-item>
                 <a-button size="large" class="submit" type="primary" htmlType="submit">
                 登录
@@ -147,26 +147,37 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           // console.log("Received values of form: ", values);
-          this.$router.push({path:'/'})
+		  //interface check: 注册(username,password) 
+		  //simulate
+		  values=this.form.getFieldsValue()
+		  var res=true;
+		  if (values['email']=='1152372646@qq.com'){
+			  res=false
+		  }
+		  if (res){this.$message.success('注册成功！');
+          this.$router.push({path:'/'})}
+		  else{
+			  this.$message.error('用户名已被注册！');
+		  }
         }
       });
     },
-    send() {
-      new Promise((resolve, reject) => {
-        this.form.validateFields(["mobile"], {}, (err, values) => {
-          if (err) {
-            reject(err);
-          } else {
-            message.loading("Action in progress..", 0);
-            setTimeout(() => {
-              this.start = true;
-              message.destroy();
-              message.success("This is a message of success code [ 4569 ]", 10);
-            }, 1000);
-          }
-        });
-      });
-    }
+    // send() {
+    //   new Promise((resolve, reject) => {
+    //     this.form.validateFields(["mobile"], {}, (err, values) => {
+    //       if (err) {
+    //         reject(err);
+    //       } else {
+    //         message.loading("Action in progress..", 0);
+    //         setTimeout(() => {
+    //           this.start = true;
+    //           message.destroy();
+    //           message.success("This is a message of success code [ 4569 ]", 10);
+    //         }, 1000);
+    //       }
+    //     });
+    //   });
+    // }
   }
 };
 </script>

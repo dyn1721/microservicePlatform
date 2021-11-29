@@ -42,7 +42,17 @@ const router = new Router({
 		  name: 'business',
 		  component: BlankLayout,
 		  children: [
-		    { path: '/business/homework', name: 'homework', component: () => import('@/views/Business/Homework') },
+		    { path: '/business/homework', 
+				name: 'homework', 
+				component: () => import('@/views/Business/Homework'),
+				 children:[
+					 
+				 ]
+				 },
+			{path: '/business/courseInfo',
+			 name: 'courseInfo', 
+			 component: () => import('@/views/Business/Course')
+			} 
 		    // { path: '/dashboard/monitor', name: 'monitor', component: () => import('@/views/Dashboard/Analysis') },
 		  ]
 		},

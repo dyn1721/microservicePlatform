@@ -53,6 +53,11 @@ export default {
   //业务模块
   'menu.business': '业务模块',
   'menu.business.homework': '作业平台',
+  'business.homework.createNew':'新建课程',
+  'business.homework.myList':'我的课程',
+  'business.homework.courseInfo':'课程详情',
+  'business.homework.homeworks':'课程任务',
+  'business.homework.students':'课程学生',
   //---
   'app.home.introduce': '介绍',
   'app.analysis.test': '工专路 {no} 号店',

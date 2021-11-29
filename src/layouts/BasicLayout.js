@@ -65,7 +65,9 @@ const BasicLayout = {
         })
     },
     mounted() {
+		console.log('BasicLayouts')
 		if (this.autoLoginKey==false){
+			console.log('BasicLayouts!')
 			window.location.href='/';
 		}
         this.$store.dispatch('global/nav/getMenuNav');
