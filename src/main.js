@@ -7,8 +7,9 @@ import { sync } from 'vuex-router-sync'
 import zh_CN from "./locales/zh_CN";
 import en_US from "./locales/en_US";
 import defaultSettings from './defaultSettings'
-
-
+import iView from 'iview';
+import 'iview/dist/styles/iview.css'; 
+Vue.use(iView);
 Vue.config.productionTip = false
 
 import { message} from 'ant-design-vue'
