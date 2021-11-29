@@ -17,7 +17,7 @@
 返回true false就行 （暂时没考虑检查账户是否存在这种细分错误）  
 
 - **注册(username:String,password:String)**  
-没啥好说的 你懂的 创个新user  
+没啥好说的 你懂的 创个新user(后台无需检查用户名密码合法性)  
 返回true表示成功保存来回调 false表示用户名重复  
 
 
