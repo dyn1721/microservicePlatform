@@ -3,21 +3,22 @@
 
 #### 需要的接口
 ##### 登录/注册
-- 自动登录密钥提交服务器保存(autoLoginKey:String)
- - 自动登录会向服务器查询这个密钥和本地密钥比对，符合就无需密码登录（避免使用极不安全的cookie） 每个user保存一个该属性
- - 返回true表示成功保存来回调
+- **自动登录密钥提交服务器保存(autoLoginKey:String)** 
+ 
+自动登录会向服务器查询这个密钥和本地密钥比对，符合就无需密码登录（避免使用极不安全的cookie） 每个user保存一个该属性  
+ 返回true表示成功保存来回调
 
-- 自动登录密钥检查(username:String,loadAutoKey:String)
- - 用户勾选自动登录后以后访问首先发送该请求，检查该用户对应的密钥字段是否正确，保证登录的安全性
- - 返回true false就行
+- **自动登录密钥检查(username:String,loadAutoKey:String)**  
+用户勾选自动登录后以后访问首先发送该请求，检查该用户对应的密钥字段是否正确，保证登录的安全性  
+返回true false就行
 
-- 检查账号密码 (username:String, password: String)
- - 登录时请求 
- - 返回true false就行 （暂时没考虑检查账户是否存在这种细分错误）
+- **检查账号密码 (username:String, password: String)**  
+登录时请求   
+返回true false就行 （暂时没考虑检查账户是否存在这种细分错误）  
 
-- 注册(username:String,password:String)
- - 没啥好说的 你懂的 创个新user
- - 返回true表示成功保存来回调 false表示用户名重复
+- **注册(username:String,password:String)**  
+没啥好说的 你懂的 创个新user(后台无需检查用户名密码合法性)  
+返回true表示成功保存来回调 false表示用户名重复  
 
 ##### 作业发布平台
 - 查询某
