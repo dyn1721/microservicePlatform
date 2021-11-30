@@ -57,7 +57,28 @@
 									<Button type="success" @click="submitCourseInfoModify">提交</Button>
 								</div>
 							</Drawer>
-
+							<Drawer  title="修改作业" v-model="homeworkModifyVisible" width="1020" :mask-closable="false">
+							
+								<div class="demo-drawer-footer">
+									<Input style="margin-bottom: 10px" v-model="update1" :placeholder="courseDetails.title" />
+									<Input style="margin-bottom: 10px" v-model="update2" type="textarea" :autosize="{minRows: 3,maxRows: 10}"
+									 :placeholder="courseDetails.intro" />
+									<Button style="margin-right: 8px" @click="homeworkModifyVisible = false">取消</Button>
+									<Button type="success" @click="homeworkModifySubmit">提交</Button>
+								</div>
+							</Drawer>
+							<Drawer :title="update1+'的提交情况'" v-model="submitVisible" width="1020" :mask-closable="false">
+								<Card v-for="(item,i) in update3" :key="'submit'+i" style="height: 100px;">
+								<p style="font-size: 25px; position: absolute; left: 20px; top:30px;font-weight: bold; ">{{item.username}}:</p>
+								<p style="font-size: 22px; position: absolute; right: 20px; top:30px;font-style:oblique ; ">" {{item.content}} "</p>
+								</Card>
+							</Drawer>
+							<Drawer :title="update1+'的提交情况'" v-model="submitVisiblePersonal" width="1020" :mask-closable="false">
+								<Card v-for="(item,i) in update3" :key="'submit'+i" style="height: 100px;">
+								<p style="font-size: 25px; position: absolute; left: 20px; top:30px;font-weight: bold; ">{{item.taskTitle}}:</p>
+								<p style="font-size: 22px; position: absolute; right: 20px; top:30px;font-style:oblique ; ">" {{item.commit}} "</p>
+								</Card>
+							</Drawer>
 							<a-col :span="8" style="height: 500px;">
 								<Card :bordered="true">
 									<img src="../../assets/course.png" style="height: 40px; position: absolute; top:30px;" />
@@ -100,6 +121,7 @@
 
 
 					</a-tab-pane>
+		
 					<a-tab-pane key="homeworks" :tab="$t('business.homework.homeworks')">
 						<Card v-for="(item,i) in courseDetails.task" :key="'task'+i" style="height: 200px;">
 							<img :src="item.iconSrc" style=" position: absolute; top:30px;left: 30px; height: 70px;" />
@@ -107,17 +129,17 @@
 							<hr noshade size=1 color=#dfe2df width=300 style=" position: absolute; top:60px;left: 120px; ">
 							<p style=" position: absolute; top:70px;left: 120px; font-size: 14px;width: 75%;"> {{item.taskIntro}} </p>
 							<img v-show="ifStudent" :src="item.status" style=" position: absolute; top:30%;right: 30px; height: 70px;" />
-							<a-button v-show="ifStudent" type="primary" size="" style=" position: absolute; top: 72%;right: 29px;width: 70px; ">
+							<a-button v-show="ifStudent" type="primary"  style=" position: absolute; top: 72%;right: 29px;width: 70px; ">
 								提交
 							</a-button>
 
-							<a-button v-show="ifTeacher" type="primary" size="" style=" position: absolute; top:20%;right: 29px;width: 100px; ">
+							<a-button v-show="ifTeacher" @click="submitShow(item)" type="primary"style=" position: absolute; top:20%;right: 29px;width: 100px; ">
 								提交情况
 							</a-button>
-							<a-button v-show="ifTeacher" type="primary" size="" style=" position: absolute; top: 40%;right: 29px;width: 100px; ">
+							<a-button v-show="ifTeacher"  @click="homeworkModify(item)" type="primary"  style=" position: absolute; top: 40%;right: 29px;width: 100px; ">
 								修改作业
 							</a-button>
-							<a-button v-show="ifTeacher" type="danger" size="" style=" position: absolute; top: 60%;right: 29px;width: 100px; ">
+							<a-button @click="deleteHomeworkWarn" v-show="ifTeacher" type="danger"  style=" position: absolute; top: 60%;right: 29px;width: 100px; ">
 								删除作业
 							</a-button>
 						</Card>
@@ -128,10 +150,10 @@
 							<p style=" position: absolute; top:30px;left: 120px; font-size: 18px;"> {{item.username}} </p>
 							<p style=" position: absolute; top:30px;left: 300px; font-size: 18px; font-style:oblique ;"> " {{item.intro}} "
 							</p>
-							<a-button v-show="ifTeacher" type="primary" size="" style=" position: absolute; top:30%;right: 150px;width: 100px; ">
+							<a-button  @click="submitShowPersonal(item)"  v-show="ifTeacher" type="primary"  style=" position: absolute; top:30%;right: 150px;width: 100px; ">
 								作业情况
 							</a-button>
-							<a-button v-show="ifTeacher" type="danger" size="" style=" position: absolute; top:30%;right: 29px;width: 100px; ">
+							<a-button @click="deleteStudentWarn" v-show="ifTeacher" type="danger" style=" position: absolute; top:30%;right: 29px;width: 100px; ">
 								删除学生
 							</a-button>
 						</Card>
@@ -183,8 +205,12 @@
 			courseDetails: {},
 			courseModifyVisible: false,
 			courseNoticeModifyVisible: false,
+			submitVisiblePersonal:false,
+			homeworkModifyVisible:false,
+			submitVisible:false,
 			update1: null,
-			update2: null
+			update2: null,
+			update3: null,
 
 		}),
 		components: {
@@ -211,13 +237,39 @@
 			yuan,
 			numeral,
 			deleteWarn() {
-				const title = 'Title';
-				const content = '<p>Content of dialog</p><p>Content of dialog</p>';
 				this.$Modal.confirm({
 					title: '重要操作提示',
 					content: '<p>你确定要删除该课程？</p><p>该操作可能不可逆，请确认</p>',
 					onOk: () => {
 						//interface check: 删除课程(courseid)
+						//simulate
+						this.$Message.info('delete ok');
+					},
+					onCancel: () => {
+						this.$Message.info('delete cancel');
+					}
+				});
+			},
+			deleteHomeworkWarn(){
+				this.$Modal.confirm({
+					title: '重要操作提示',
+					content: '<p>你确定要删除该作业？</p><p>该操作可能不可逆，请确认</p>',
+					onOk: () => {
+						//interface check: 删除作业(courseid,taskid)
+						//simulate
+						this.$Message.info('delete ok');
+					},
+					onCancel: () => {
+						this.$Message.info('delete cancel');
+					}
+				});
+			},
+			deleteStudentWarn(){
+				this.$Modal.confirm({
+					title: '重要操作提示',
+					content: '<p>你确定要删除该学生？</p><p>该操作可能不可逆，请确认</p>',
+					onOk: () => {
+						//interface check: 删除学生(courseid,username)
 						//simulate
 						this.$Message.info('delete ok');
 					},
@@ -250,6 +302,60 @@
 				this.courseDetails.notice = this.update1
 				this.courseNoticeModifyVisible = false;
 			},
+			homeworkModify(item){
+				console.log(item)
+				this.update1 =item.taskTitle
+				this.update2 =item.taskIntro
+				this.update3 =item.taskId
+				this.homeworkModifyVisible = true;
+			},
+			homeworkModifySubmit(){
+				//interface check: 修改作业信息(courseid,taskid,tasktitle，taskinfo)
+				//simulate
+				this.courseDetails.task[this.update3-1].taskTitle = this.update1
+				this.courseDetails.task[this.update3-1].taskIntro=this.update2
+				this.homeworkModifyVisible = false;
+			},
+			submitShowPersonal(item){
+				this.update1 =item.username
+				//interface check: 获取某人在某课程的所有作业的提交情况(courseid,username)
+				//simulate
+				this.update3=[{
+					taskTitle:"作业一 R301压枪教学",
+					commit:'感觉不如3030····近战'
+				},
+				{
+					taskTitle:"作业二 凤凰打电教学",
+					commit:'学会了 就是队友死太快了'
+				},
+				{
+					taskTitle:"作业四 决赛圈的终极一战处理",
+					commit:'打不到决赛圈怎么办 老师'
+				},
+				]
+				this.submitVisiblePersonal = true;
+			},
+			submitShow(item){
+				this.update1 =item.taskTitle
+				this.update2 =item.taskIntro
+				this.update3 =item.taskId
+				//interface check: 获取某作业的提交情况(courseid,taskid)
+				//simulate
+				this.update3=[{
+					username:'十年老OP',
+					content:"感觉不如原神。。。画质"
+				},
+				{
+					username:'火烧俱乐部',
+					content:"我宣布直播间由白字占领！！"
+				},
+				{
+					username:'Sally哥',
+					content:"Sally哥来了全杀了"
+				},
+				]
+				this.submitVisible = true;
+			}
 		},
 		computed: {
 			...mapGetters({

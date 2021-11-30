@@ -70,6 +70,67 @@ this.courseDetails={
 - 只会在身份是老师时调用
 修改该课程的课程名和简介属性 返回修改结果
 
+- **修改课程最新通知(courseid,notice)**
+- 只会在身份是老师时调用
+修改指定课程通知字段属性 返回修改结果
+
+- **修改作业信息(courseid,taskid,tasktitle，taskinfo)**
+- 只会在身份是老师时调用
+修改指定课程指定任务的标题和简介字段属性 返回修改结果
+
+- **删除课程(courseid)**
+- 只会在身份是老师时调用
+修改数据库中与该课程相关所有数据 返回修改结果
+
+- **删除作业(courseid,taskid)**
+- 只会在身份是老师时调用
+修改数据库中与该课程该作业相关所有数据 返回修改结果
+
+- **删除学生(courseid,username)**
+- 只会在身份是老师时调用
+修改数据库中与该课程该学生相关所有数据 返回修改结果
+
+- **获取某作业的提交情况(courseid,taskid)**
+- 只会在身份是老师时调用  
+返回该课程该作业的所有提交记录  
+返回数据格式如：
+'''
+this.update3=[{
+					username:'AA',
+					content:"sadjksaljdslajdlsadjkla"
+				},
+				{
+					username:'BB',
+					content:"sadjksaljdslajdlsadjkla"
+				},
+				{
+					username:'CC',
+					content:"sadjksaljdslajdlsadjkla"
+				},
+				]
+'''
+
+- **获取某人在某课程的所有作业的提交情况(courseid,username)**
+- 只会在身份是老师时调用  
+返回某人在某课程的所有作业的提交情况
+返回数据格式如：
+'''
+this.update3=[{
+					taskTitle:"作业一 R301压枪教学",
+					commit:'感觉不如3030····近战'
+				},
+				{
+					taskTitle:"作业二 凤凰打电教学",
+					commit:'学会了 就是队友死太快了'
+				},
+				{
+					taskTitle:"作业四 决赛圈的终极一战处理",
+					commit:'打不到决赛圈怎么办 老师'
+				},
+				]
+'''
+
+
 #### 软件架构
 * [vue/cli3](https://cli.vuejs.org)
 * vue 2.5.17 
