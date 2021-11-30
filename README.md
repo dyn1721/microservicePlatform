@@ -1,6 +1,42 @@
 # microservicePlatform-front
  高等软工项目
 
+#### 数据格式（类属性）
+##### 课程
+this.courseDetails={  
+				title: 'APEX：从落地重伤到顶猎乱杀',  
+				courseId:'1',  
+				picSrc: "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png",  
+				intro: "301歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子",  
+				teacher: ["卡莎","青野"], //list 
+				assistant: ["白字", "火神"],  // list 
+				notice:"还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了",  
+				task:[  
+					{  
+						taskId:'1',  
+						taskTitle:'作业一 R301压枪教学',  
+						taskIntro:'关于我一梭子只能打11这件事'  
+					},  
+					{  
+						taskId:'2',  
+						taskTitle:'作业二 凤凰打电教学',  
+						taskIntro:'如何让队友帮你顶住10s'  
+					},  
+				],  
+				studentList:[  
+					{  
+						username:'卡卡国大孝子',  
+						intro:'apex我只认卡神！',  
+						gender:'sir'  
+					},  
+					{  
+						username:'火烧俱乐部',  
+						intro:'注意米线！',  
+						gender:'miss'  
+					},  
+				]  
+			};  
+
 #### 需要的接口
 ##### 登录/注册
 - **自动登录密钥提交服务器保存(autoLoginKey:String)** 
@@ -29,6 +65,10 @@
 -  只会在身份是学生时调用
 查询某username对应某courseId 下 指定taskList的作业提交状态（已提交1，未提交0 ，已打分*）
 返回同样也是对应的状态list[1,0,1```]
+
+- **修改课程信息(courseid,title,intro)**
+- 只会在身份是老师时调用
+修改该课程的课程名和简介属性 返回修改结果
 
 #### 软件架构
 * [vue/cli3](https://cli.vuejs.org)
