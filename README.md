@@ -21,8 +21,14 @@
 返回true表示成功保存来回调 false表示用户名重复  
 
 ##### 作业发布平台
-- 查询某
+- **返回某课程的详细数据( courseID ，username )**
+根据username用户权限返回结果，结果包括该用户对课程访问权限等级
+例如 0 无任何权限（不返回课程数据）； 1 学生（并返回该课程简介 通知 任务列表和课程学生等相关数据） 2 老师（并返回课程相关数据）
 
+-  **列表查询某user某课程的作业记录 ( username ，courseId， taskList : [ taskId1,taskId2,taskId3 ]  )**
+-  只会在身份是学生时调用
+查询某username对应某courseId 下 指定taskList的作业提交状态（已提交1，未提交0 ，已打分*）
+返回同样也是对应的状态list[1,0,1```]
 
 #### 软件架构
 * [vue/cli3](https://cli.vuejs.org)
