@@ -1,6 +1,43 @@
 # microservicePlatform-front
  高等软工项目
 
+#### 数据格式（类属性）
+##### 课程
+```
+this.courseDetails={  
+				title: 'APEX：从落地重伤到顶猎乱杀',  
+				courseId:'1',  
+				picSrc: "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png",  
+				intro: "301歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子",  
+				teacher: ["卡莎","青野"], //list   
+				assistant: ["白字", "火神"],  // list   
+				notice:"还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了",    
+				task:[  
+					{  
+						taskId:'1',  
+						taskTitle:'作业一 R301压枪教学',  
+						taskIntro:'关于我一梭子只能打11这件事'  
+					},  
+					{  
+						taskId:'2',  
+						taskTitle:'作业二 凤凰打电教学',  
+						taskIntro:'如何让队友帮你顶住10s'  
+					},  
+				],  
+				studentList:[  
+					{  
+						username:'卡卡国大孝子',  
+						intro:'apex我只认卡神！',  
+						gender:'sir'  
+					},  
+					{  
+						username:'火烧俱乐部',  
+						intro:'注意米线！',  
+						gender:'miss'  
+					},  
+				]  
+			};  
+``` 
 #### 需要的接口
 ##### 登录/注册
 - **自动登录密钥提交服务器保存(autoLoginKey:String)** 
@@ -20,9 +57,80 @@
 没啥好说的 你懂的 创个新user(后台无需检查用户名密码合法性)  
 返回true表示成功保存来回调 false表示用户名重复  
 
-##### 作业发布平台
-- 查询某
+##### 作业发布平台  
+- **返回某课程的详细数据( courseID ，username )**  
+根据username用户权限返回结果，结果包括该用户对课程访问权限等级  
+例如 0 无任何权限（不返回课程数据）； 1 学生（并返回该课程简介 通知 任务列表和课程学生等相关数据） 2 老师（并返回课程相关数据）  
 
+-  **列表查询某user某课程的作业记录 ( username ，courseId， taskList : [ taskId1,taskId2,taskId3 ]  )**  
+-  只会在身份是学生时调用  
+查询某username对应某courseId 下 指定taskList的作业提交状态（已提交1，未提交0 ，已打分*）  
+返回同样也是对应的状态list[1,0,1```]  
+
+- **修改课程信息(courseid,title,intro)**  
+- 只会在身份是老师时调用    
+修改该课程的课程名和简介属性 返回修改结果  
+
+- **修改课程最新通知(courseid,notice)**  
+- 只会在身份是老师时调用    
+修改指定课程通知字段属性 返回修改结果  
+
+- **修改作业信息(courseid,taskid,tasktitle，taskinfo)**  
+- 只会在身份是老师时调用  
+修改指定课程指定任务的标题和简介字段属性 返回修改结果
+
+- **删除课程(courseid)**
+- 只会在身份是老师时调用  
+修改数据库中与该课程相关所有数据 返回修改结果
+
+- **删除作业(courseid,taskid)**
+- 只会在身份是老师时调用  
+修改数据库中与该课程该作业相关所有数据 返回修改结果
+
+- **删除学生(courseid,username)**
+- 只会在身份是老师时调用  
+修改数据库中与该课程该学生相关所有数据 返回修改结果
+
+- **获取某作业的提交情况(courseid,taskid)**
+- 只会在身份是老师时调用    
+返回该课程该作业的所有提交记录    
+返回数据格式如：
+
+``` 
+this.update3=[{
+					username:'AA',
+					content:"sadjksaljdslajdlsadjkla"
+				},
+				{
+					username:'BB',
+					content:"sadjksaljdslajdlsadjkla"
+				},
+				{
+					username:'CC',
+					content:"sadjksaljdslajdlsadjkla"
+				},
+				]
+``` 
+
+- **获取某人在某课程的所有作业的提交情况(courseid,username)**
+- 只会在身份是老师时调用   
+返回某人在某课程的所有作业的提交情况
+返回数据格式如：
+``` 
+this.update3=[{
+					taskTitle:"作业一 R301压枪教学",
+					commit:'感觉不如3030····近战'
+				},
+				{
+					taskTitle:"作业二 凤凰打电教学",
+					commit:'学会了 就是队友死太快了'
+				},
+				{
+					taskTitle:"作业四 决赛圈的终极一战处理",
+					commit:'打不到决赛圈怎么办 老师'
+				},
+				]
+``` 
 
 #### 软件架构
 * [vue/cli3](https://cli.vuejs.org)
