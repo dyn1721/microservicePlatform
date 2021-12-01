@@ -3,23 +3,6 @@
 		<a-card :loading="loading" :bordered="false" :bodyStyle="{padding:'0px'}">
 			<div class="salesCard">
 				<a-tabs size="large" :tabBarStyle="{marginBottom: '24px',paddingLeft:'16px'}">
-					<div slot="tabBarExtraContent" class="salesExtraWrap">
-						<div class="salesExtra">
-							<a>
-								{{$t('app.analysis.all-day')}}
-							</a>
-							<a class="currentDate">
-								{{$t('app.analysis.all-week')}}
-							</a>
-							<a>
-								{{$t('app.analysis.all-month')}}
-							</a>
-							<a>
-								{{$t('app.analysis.all-year')}}
-							</a>
-						</div>
-						<a-range-picker style="width:256px;" />
-					</div>
 					<a-tab-pane key="courseInfo" :tab="$t('business.homework.courseInfo')">
 
 						<a-row>
@@ -79,6 +62,16 @@
 								<p style="font-size: 22px; position: absolute; right: 20px; top:30px;font-style:oblique ; ">" {{item.commit}} "</p>
 								</Card>
 							</Drawer>
+							<Drawer :title="'提交: '+update2" v-model="submitHwVisible" width="620" :mask-closable="false">
+								<div class="demo-drawer-footer">
+									<p style="font-size: 14px; font-style:oblique ;">{{update3}}</p>
+									<br /><br />
+									<Input style="margin-bottom: 10px" v-model="update4" type="textarea" :autosize="{minRows: 1,maxRows: 8}" placeholder="请输入你的提交内容" />
+									
+									<Button style="margin-right: 8px" @click="submitHwVisible = false">取消</Button>
+									<Button type="success" @click="submitHomeworkOver">提交</Button>
+								</div>
+							</Drawer>
 							<a-col :span="8" style="height: 500px;">
 								<Card :bordered="true">
 									<img src="../../assets/course.png" style="height: 40px; position: absolute; top:30px;" />
@@ -129,7 +122,7 @@
 							<hr noshade size=1 color=#dfe2df width=300 style=" position: absolute; top:60px;left: 120px; ">
 							<p style=" position: absolute; top:70px;left: 120px; font-size: 14px;width: 75%;"> {{item.taskIntro}} </p>
 							<img v-show="ifStudent" :src="item.status" style=" position: absolute; top:30%;right: 30px; height: 70px;" />
-							<a-button v-show="ifStudent" type="primary"  style=" position: absolute; top: 72%;right: 29px;width: 70px; ">
+							<a-button @click='submitHomework(item,i)'  v-show="ifStudent" type="primary"  style=" position: absolute; top: 72%;right: 29px;width: 70px; ">
 								提交
 							</a-button>
 
@@ -157,6 +150,18 @@
 								删除学生
 							</a-button>
 						</Card>
+					</a-tab-pane>
+					
+					<a-tab-pane style="height: 500px;"  key="create" tab="新建作业">
+					  <p v-show="!ifTeacher" style="font-size: 25px; position: absolute; left: 600px; top:230px; ">学生账号不能新建作业！</p>
+					  <div v-show="ifTeacher" >
+						  <Input style="margin-bottom: 10px;width: 80%;position: relative;left: 10%; " v-model="update1" placeholder="作业名" />
+						  <Input style="margin-bottom: 10px;width: 80%;position: relative;left: 10%;" v-model="update2" type="textarea" :autosize="{minRows: 3,maxRows: 10}"
+						   placeholder="作业内容" />
+							 <a-button @click="createHomework" type="primary" size="default" style=" position: relative;width: 80%;left: 10%;top: 10px;  ">
+							 	新建作业
+							 </a-button>
+					  </div>
 					</a-tab-pane>
 				</a-tabs>
 			</div>
@@ -207,10 +212,13 @@
 			courseNoticeModifyVisible: false,
 			submitVisiblePersonal:false,
 			homeworkModifyVisible:false,
+			submitHwVisible:false,
 			submitVisible:false,
 			update1: null,
 			update2: null,
 			update3: null,
+			update4: null,
+			update5: null,
 
 		}),
 		components: {
@@ -355,6 +363,34 @@
 				},
 				]
 				this.submitVisible = true;
+			},
+			createHomework(){
+				//  interface check: 新建作业( username ，courseId,taskname,taskIntro )  简化版本 安全考虑应该username存在vuex中防止修改 懒得改了
+				//simulate
+				var taskId='233'
+				this.courseDetails.task.push({
+					taskId: taskId,
+					taskTitle: this.update1,
+					taskIntro: this.update2,
+					iconSrc: require('../../assets/ran' + (Math.floor(Math.random() * 4) + 1) + '.png')
+				})
+				this.$Message.success('创建作业成功！');
+			},
+			submitHomework(item,i){
+				this.update1=item.taskId;
+				this.update2=item.taskTitle;
+				this.update3=item.taskIntro;
+				this.update5=i;
+				console.log(this.update5);
+				this.submitHwVisible=true;  
+			},
+			submitHomeworkOver(){
+				//  interface check: 学生提交作业( username ，courseId,taskId,content=this.update4 )  
+				//simulate
+				var res=1 //提交成功
+				this.courseDetails.task[this.update5]['status']=require('../../assets/complete.png');
+				this.submitHwVisible=false;  
+				this.$Message.success('提交作业成功！');
 			}
 		},
 		computed: {
@@ -374,7 +410,7 @@
 			this.courseID = this.$route.query.courseid;
 			//  interface check: 返回某课程的详细数据( courseID ，username )
 			//simulate
-			this.visitLevel = 2; // teacher 2 student 1 none 0（踢回）
+			this.visitLevel = 1; // teacher 2 student 1 none 0（踢回）
 			this.courseDetails = {
 				title: 'APEX：从落地重伤到顶猎乱杀',
 				courseId: '1',
@@ -465,7 +501,7 @@
 			//  interface check: 列表查询某user某课程的作业记录 ( username ，courseId， taskList : [ taskId1,taskId2,taskId3 ]  )
 			//simulate
 			if (this.visitLevel == 1) {
-				var result = [1, 0, 1];
+				var result = [1, 0, 1,0];
 				for (var i = 0; i < this.courseDetails.task.length; i++) {
 					if (result[i] == 1) {
 						this.courseDetails.task[i]['status'] = require('../../assets/complete.png');

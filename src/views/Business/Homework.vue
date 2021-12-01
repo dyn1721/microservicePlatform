@@ -3,27 +3,10 @@
          <a-card :loading="loading" :bordered="false" :bodyStyle="{padding:'0px'}">
         <div class="salesCard">
           <a-tabs size="large" :tabBarStyle="{marginBottom: '24px',paddingLeft:'16px'}">
-            <div slot="tabBarExtraContent" class="salesExtraWrap">
-              <div class="salesExtra">
-                <a >
-                  {{$t('app.analysis.all-day')}}
-                </a>
-                <a class="currentDate">
-                  {{$t('app.analysis.all-week')}}
-                </a>
-                <a >
-                  {{$t('app.analysis.all-month')}}
-                </a>
-                <a >
-                  {{$t('app.analysis.all-year')}}
-                </a>
-              </div>
-              <a-range-picker style="width:256px;"/>
-            </div>
             <a-tab-pane key="myList" :tab="$t('business.homework.myList')">
 
 				<a-row>
-				      <a-col v-for="(item,i) in listData" :key="i" :span="6" style="height: 300px;">
+				      <a-col v-for="(item,i) in listData" :key="i" :span="6" style="height: 310px;">
 						  <a @click="routeCourseInfo(item.courseId)" >
 						  <a-card  hoverable style="width: 99%;height: 88%;" > <!-- style="width: 2400px;height: 2400px;" -->
 						        <img
@@ -49,8 +32,18 @@
            
          
             </a-tab-pane>
-            <a-tab-pane key="create" :tab="$t('business.homework.createNew')">
-              
+            <a-tab-pane style="height: 500px;"  key="create" :tab="$t('business.homework.createNew')">
+              <p v-show="!ifTeacher" style="font-size: 25px; position: absolute; left: 600px; top:230px; ">学生账号不能新建课程！</p>
+			  <div v-show="ifTeacher" >
+				  <Input style="margin-bottom: 10px;width: 80%;position: relative;left: 10%; " v-model="update1" placeholder="课程名" />
+				  <Input style="margin-bottom: 10px;width: 80%;position: relative;left: 10%;" v-model="update2" type="textarea" :autosize="{minRows: 3,maxRows: 10}"
+				   placeholder="课程简介" />
+				    <Input style="margin-bottom: 10px;width: 80%;position: relative;left: 10%;" v-model="update3" placeholder="讲师" />
+					 <Input style="margin-bottom: 10px;width: 80%;position: relative;left: 10%;" v-model="update4" placeholder="助教" />
+					 <a-button @click="createNewCourse" type="primary" size="default" style=" position: relative;width: 80%;left: 10%;top: 10px;  ">
+					 	修改课程信息
+					 </a-button>
+			  </div>
             </a-tab-pane>
           </a-tabs>
         </div>
@@ -70,6 +63,8 @@ import {
   Tabs,
   DatePicker,
   Avatar,
+  Button
+  
 
 } from "ant-design-vue";
 import GridContent from "@/components/PageHeaderWrapper/GridContent";
@@ -92,7 +87,65 @@ import numeral from "numeral";
 export default {
   data: () => ({
     loading: false,
-	listData:[    
+	listData:[],
+	visitLevel: 0,
+	update1:null,
+	update2:null,
+	update3:null,
+	update4:null,
+  }),
+  components: {
+	AButton: Button,
+	AAvatar:Avatar,
+    AGridContent: GridContent,
+    ACard: Card,
+    ARow: Row,
+    ACol: Col,
+    AChartCard: ChartCard,
+    AField: Field,
+    ATooltip: Tooltip,
+    AIcon: Icon,
+    ATrend: Trend,
+    AMiniProgress: MiniProgress,
+    // AMiniBar: MiniBar,
+    // AMiniArea: MiniArea,
+    ATabs: Tabs,
+    ATabPane: Tabs.TabPane,
+    ARangePicker: DatePicker.RangePicker,
+    ANumberInfo: NumberInfo
+  },
+  methods: {
+    yuan,
+    numeral,
+	routeCourseInfo(id){
+		this.$router.push({path:'/business/courseInfo/',query: {courseid:id}})
+	},
+	createNewCourse(){
+		//  interface check: 新建课程( username ，courseName,courseIntro,teacher，assistant )  简化版本 安全考虑应该username存在vuex中防止修改 懒得改了
+		//simulate
+		var courseId='233'
+		this.listData.push({
+			courseName:this.update1,
+			courseId:courseId,
+			coverPic:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
+		})
+		this.$Message.success('创建课程成功！');
+	}
+  },
+  computed: {
+          ...mapGetters({username: "global/loginUserName"}),
+		  ifTeacher: function() {
+		  	return this.visitLevel == 2
+		  }
+        },
+  mounted() {
+	 //  interface check: 返回账户权限( username )
+	 //simulate
+	this.visitLevel = 1; // teacher 2 student 1 
+  	console.log(this.visitLevel)
+	//interface check: 获取某用户相关的所有课程(username)
+	//simulate
+	this.listData=[    
 		{
 			courseName:'高等软件工程',
 			courseId:'1',
@@ -136,38 +189,6 @@ export default {
 			coverPic:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
 		}
 	]
-  }),
-  components: {
-	AAvatar:Avatar,
-    AGridContent: GridContent,
-    ACard: Card,
-    ARow: Row,
-    ACol: Col,
-    AChartCard: ChartCard,
-    AField: Field,
-    ATooltip: Tooltip,
-    AIcon: Icon,
-    ATrend: Trend,
-    AMiniProgress: MiniProgress,
-    // AMiniBar: MiniBar,
-    // AMiniArea: MiniArea,
-    ATabs: Tabs,
-    ATabPane: Tabs.TabPane,
-    ARangePicker: DatePicker.RangePicker,
-    ANumberInfo: NumberInfo
-  },
-  methods: {
-    yuan,
-    numeral,
-	routeCourseInfo(id){
-		this.$router.push({path:'/business/courseInfo/',query: {courseid:id}})
-	}
-  },
-  computed: {
-          ...mapGetters({username: "global/loginUserName"}),
-        },
-  mounted() {
-  	console.log('geter!')
   }
 };
 </script>
