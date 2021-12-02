@@ -13,16 +13,25 @@ export default {
   name: "TableData",
   data() {
     return {
-      tableFields: ['id', 'username', 'password'],
-      tableData: [
-        {
-          key: '1',
-          id: 0,
-          username: 'hzy',
-          password: '123',
-        }
-      ],
+      tableFields: [],
+      tableData: [],
     }
+  },
+  mounted() {
+    this.axios.get(`/tables/${this.tableName}/field`)
+        .then((res) => {
+          this.tableFields = res.data.tableFields;
+        })
+        .catch((err) => {
+          this.$message.error('获取表数据失败');
+        });
+    this.axios.get(`/tables/${this.tableName}/records`)
+        .then((res) => {
+          this.tableData = res.data.tableData;
+        })
+        .catch((err) => {
+          this.$message.error('获取表数据失败');
+        });
   },
   computed: {
     tableColumns() {

@@ -1,63 +1,64 @@
 <template>
   <div class="add-record">
     <a-card :title="tableName + ' 添加记录'">
-      <a-form :form="record">
-        <a-form-item v-for="(field, index) in tableSchema"
-                     :label="field.name.charAt(0).toUpperCase() + field.name.substring(1)">
-          <a-input :v-decorator="'[' + field.name + ',{ rules: [{ required: true, message: \'Field Required!\'}]},]'">
+      <a-form-model :model="record">
+        <a-form-model-item v-for="(field, index) in tableFields"
+                           :label="field.charAt(0).toUpperCase() + field.substring(1)"
+                           :prop="field"
+                           :label-col="{ span: 3, offset: 1 }" :wrapper-col="{ span: 16 }">
+          <a-input v-model="record[field]">
           </a-input>
-        </a-form-item>
-        <a-form-item>
-          <a-button type="primary" html-type="submit">
+        </a-form-model-item>
+        <a-form-model-item :wrapper-col="{ offset: 4, span: 16 }">
+          <a-button type="primary" @click="createRecord()">
             提交
           </a-button>
-        </a-form-item>
-      </a-form>
+        </a-form-model-item>
+      </a-form-model>
     </a-card>
   </div>
 </template>
 
 <script>
-import {Card, Form, Input, Button} from "ant-design-vue";
-// 字段类型分类：
-// 0. 字符串 -> 单行/多行文本框
-// 1. 单选枚举值 -> 下拉列表
-// 2. 多选枚举值 -> 穿梭框
-// 3. 布尔值 -> 开关
-// 4. 整数 -> 整数文本框
-// 5. 浮点数 -> 浮点数文本框
+import {Card, FormModel, Input, Button, Row, Col} from "ant-design-vue";
+
 export default {
   name: "AddRecord",
-  mounted() {
-    this.requestTableSchema();
-  },
   data() {
     return {
-      tableSchema: [
-        {
-          name: 'username',
-          type: 0,
-        },
-        {
-          name: 'password',
-          type: 0,
-        },
-      ],
+      tableFields: [],
       record: {},
     }
   },
-  props: ['tableName'],
+  mounted() {
+    this.axios.get(`/tables/${this.tableName}/field`)
+        .then((res) => {
+          this.tableFields = res.data.tableFields;
+        })
+        .catch((err) => {
+          this.$message.error('获取表字段失败');
+        });
+  },
   methods: {
-    requestTableSchema() {
-      // TODO: 网络获取表字段与类型
+    createRecord() {
+      this.axios.post(`/tables/${this.tableName}/records`, this.record)
+          .then((res) => {
+            this.$message.success('添加数据成功');
+          })
+          .catch((err) => {
+            this.$message.error('添加数据失败');
+          });
     }
   },
+  props: ['tableName'],
   components: {
     ACard: Card,
     ACardGrid: Card.Grid,
     ACardMeta: Card.Meta,
-    AForm: Form,
-    AFormItem: Form.Item,
+    AFormModel: FormModel,
+    AFormModelItem: FormModel.Item,
+    ARow: Row,
+    ACol: Col,
     AInput: Input,
     AButton: Button,
   }

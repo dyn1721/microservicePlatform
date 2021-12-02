@@ -8,11 +8,20 @@ import zh_CN from "./locales/zh_CN";
 import en_US from "./locales/en_US";
 import defaultSettings from './defaultSettings'
 import iView from 'iview';
-import 'iview/dist/styles/iview.css'; 
+import 'iview/dist/styles/iview.css';
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
 Vue.use(iView);
+Vue.use(VueAxios, axios)
+const mockURL = 'http://mockjs.xiaoyaoji.cn/mock/1kIdEixBdMu';
+const devURL = 'http://1.15.154.241:8000/api/v1';
+Vue.axios.defaults.baseURL = mockURL;
+
 Vue.config.productionTip = false
 
-import { message} from 'ant-design-vue'
+import { message, Form } from 'ant-design-vue'
+Vue.prototype.$form = Form;
 Vue.prototype.$message = message;
 message.config({
     duration: 2,// 持续时间
