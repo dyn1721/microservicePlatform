@@ -20,7 +20,8 @@ Vue.axios.defaults.baseURL = mockURL;
 
 Vue.config.productionTip = false
 
-import { message, Form } from 'ant-design-vue'
+import { message, Form, Modal } from 'ant-design-vue';
+Vue.use(Modal);
 Vue.prototype.$form = Form;
 Vue.prototype.$message = message;
 message.config({
