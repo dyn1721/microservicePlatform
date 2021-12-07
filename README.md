@@ -1,5 +1,11 @@
 # microservicePlatform-front
- 高等软工项目
+
+高等软工项目 前端部分
+
+- [x] 用户管理页面
+- [x] 数据表管理页面
+- [x] 课程、作业相关页面
+- [ ] 查看日志页面 (需明确后端日志内容与格式)
 
 #### DLC模块
 - **暂时或者永远都不需要搞的 ：**
@@ -9,44 +15,48 @@
 - 助教 老师字段 简化 为String
 
 #### 数据格式（类属性）
+
 ##### 课程
-```
-this.courseDetails={  
-				title: 'APEX：从落地重伤到顶猎乱杀',  
-				courseId:'1',  
-				picSrc: "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png",  
-				intro: "301歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子",  
-				teacher: "卡莎" 青野", //简化为String  
-				assistant: "白字 火神",  // 简化为String   
-				notice:"还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了",    
-				task:[  
-					{  
-						taskId:'1',  
-						taskTitle:'作业一 R301压枪教学',  
-						taskIntro:'关于我一梭子只能打11这件事'  
-					},  
-					{  
-						taskId:'2',  
-						taskTitle:'作业二 凤凰打电教学',  
-						taskIntro:'如何让队友帮你顶住10s'  
-					},  
-				],  
-				studentList:[  
-					{  
-						username:'卡卡国大孝子',  
-						intro:'apex我只认卡神！',  
-						gender:'sir'  
-					},  
-					{  
-						username:'火烧俱乐部',  
-						intro:'注意米线！',  
-						gender:'miss'  
-					},  
-				]  
-			};  
+```js
+this.courseDetails = {
+  title: 'APEX：从落地重伤到顶猎乱杀',
+  courseId: '1',
+  picSrc: "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png",
+  intro: "301歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子",
+  teacher: "卡莎 青野", //简化为String  
+  assistant: "白字 火神",  // 简化为String   
+  notice: "还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了",
+  task: [
+    {
+      taskId: '1', 
+      taskTitle: '作业一 R301压枪教学',
+      taskIntro: '关于我一梭子只能打11这件事'
+    },
+    {
+      taskId: '2',
+      taskTitle: '作业二 凤凰打电教学',
+      taskIntro: '如何让队友帮你顶住10s'
+    },
+  ],
+  studentList: [
+    {
+      username: '卡卡国大孝子',
+      intro: 'apex我只认卡神！',
+      gender: 'sir'
+    },
+    {
+      username: '火烧俱乐部',
+      intro: '注意米线！',
+      gender: 'miss'
+    },
+  ]
+};
 ``` 
+
 #### 需要的接口
+
 ##### 登录/注册
+
 - **自动登录密钥提交服务器保存(autoLoginKey:String)** 
  
 自动登录会向服务器查询这个密钥和本地密钥比对，符合就无需密码登录（避免使用极不安全的cookie） 每个user保存一个该属性  
@@ -72,19 +82,19 @@ this.courseDetails={
 - **获取某用户相关的所有课程(username)**   
 如果是老师账号就返回他开的课程，学生返回他选的课程    
 返回数据格式如：
-``` 
-listData:[    
-		{
-			courseName:'高等软件工程',
-			courseId:'1',
-			coverPic:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'  //封面pic
-		},
-		{
-			courseName:'高等软件工程2',
-			courseId:'2',
-			coverPic:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
-		},
-		]
+```js
+listData: [    
+  {
+    courseName:'高等软件工程',
+    courseId:'1',
+    coverPic:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'  //封面pic
+  },
+  {
+    courseName:'高等软件工程2',
+    courseId:'2',
+    coverPic:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
+  },
+]
 ``` 
 
 - **新建课程( username ，courseName,courseIntro,teacher，assistant )**
@@ -101,7 +111,7 @@ listData:[
 根据username用户权限返回结果，结果包括该用户对课程访问权限等级  
 例如 0 无任何权限（不返回课程数据）； 1 学生（并返回该课程简介 通知 任务列表和课程学生等相关数据） 2 老师（并返回课程相关数据）  
 返回数据如：  
-```
+```js
 this.courseDetails={  
 				title: 'APEX：从落地重伤到顶猎乱杀',  
 				visitLevel:'2', //该账户的访问权限
