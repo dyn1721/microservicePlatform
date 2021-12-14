@@ -14,7 +14,7 @@
         </a-card>
       </a-col>
       <a-col :span="18">
-        <div class="data-list">
+        <div class="data-list" v-if="currentTableName">
           <TableData :tableName="currentTableName" v-if="currentShow === 0" :key="currentTable"></TableData>
           <AddRecord :tableName="currentTableName" v-if="currentShow === 1" :key="currentTable"></AddRecord>
         </div>
@@ -25,19 +25,24 @@
 
 <script>
 import {Row, Col, Card, List, Button, Icon, Avatar} from "ant-design-vue";
+import {DjangoURL} from '../../main';
 import TableData from "../../components/DataManage/TableData.vue";
-import AddRecord from "../../components/DataManage/AddRecord";
+import AddRecord from "../../components/DataManage/AddRecord.vue";
 
 export default {
   data() {
     return {
       currentShow: 0,
       currentTable: 0,
-      currentTableName: 'Group',
+      currentTableName: '',
       tableList: [],
+      oldBaseURL: '',
     }
   },
   mounted() {
+    this.oldBaseURL = this.axios.defaults.baseURL;
+    this.axios.defaults.baseURL = DjangoURL;
+
     this.axios.get('/tables')
         .then((res) => {
           this.tableList = res.data.tableList;
@@ -45,6 +50,9 @@ export default {
         .catch((err) => {
           this.$message.error('数据库表获取失败');
         });
+  },
+  destroyed() {
+    this.axios.defaults.baseURL = this.oldBaseURL;
   },
   methods: {
     showTable(tableName, index) {

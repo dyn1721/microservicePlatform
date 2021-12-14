@@ -1,7 +1,7 @@
 <template>
   <div class="table-data">
     <a-card :title="tableName + ' 查看数据'">
-      <a-table :columns="tableColumns" :data-source="tableData" rowKey="id">
+      <a-table :columns="tableColumns" :data-source="tableData" rowKey="id" :scroll="{ x: tableFields.length * 150, y: 350 }">
         <span slot="action" slot-scope="text, record">
           <a @click="showModify = true; currentRecord = record;">修改</a>
           <a-divider type="vertical"/>
@@ -18,7 +18,8 @@
     >
       <a-form-model :model="currentRecord">
         <a-form-model-item v-for="(field, index) in tableFields"
-                           :label="field.charAt(0).toUpperCase() + field.substring(1)"
+                           v-if="field !== '_id'"
+                           :label="field"
                            :prop="field"
                            :label-col="{ span: 5 }" :wrapper-col="{ span: 18 }">
           <a-input v-model="currentRecord[field]">
@@ -39,6 +40,7 @@
 
 <script>
 import {Card, Icon, Input, Table, Divider, FormModel, Modal} from "ant-design-vue";
+import {DjangoURL} from '../../main';
 
 export default {
   name: "TableData",
@@ -49,9 +51,13 @@ export default {
       showModify: false,
       showDelete: false,
       currentRecord: {},
+      oldBaseURL: '',
     }
   },
   mounted() {
+    this.oldBaseURL = this.axios.defaults.baseURL;
+    this.axios.defaults.baseURL = DjangoURL;
+
     this.axios.get(`/tables/${this.tableName}/field`)
         .then((res) => {
           this.tableFields = res.data.tableFields;
@@ -59,7 +65,7 @@ export default {
         .catch((err) => {
           this.$message.error('获取表模式失败');
         });
-    this.axios.get(`/tables/${this.tableName}/records`)
+    this.axios.get(`/tables/${this.tableName}/records?pageSize=10&pageIdx=0`)
         .then((res) => {
           this.tableData = res.data.tableData;
         })
@@ -67,12 +73,15 @@ export default {
           this.$message.error('获取表数据失败');
         });
   },
+  destroyed() {
+    this.axios.defaults.baseURL = this.oldBaseURL;
+  },
   computed: {
     tableColumns() {
       let columns = [];
       this.tableFields.forEach((field) => {
         columns.push({
-          title: field.charAt(0).toUpperCase() + field.substring(1),
+          title: field,
           dataIndex: field,
           key: field,
         });
@@ -81,13 +90,15 @@ export default {
         title: '操作',
         key: 'action',
         scopedSlots: {customRender: 'action'},
+        fixed: 'right',
+        width: 110,
       });
       return columns;
     }
   },
   methods: {
     fetchRecords() {
-      this.axios.get(`/tables/${this.tableName}/records`)
+      this.axios.get(`/tables/${this.tableName}/records?pageSize=10&pageIdx=0`)
           .then((res) => {
             this.tableData = res.data.tableData;
           })
@@ -96,7 +107,7 @@ export default {
           });
     },
     modifyRecord() {
-      this.axios.post(`/tables/${this.tableName}/records/${this.currentRecord.id}`, this.currentRecord)
+      this.axios.post(`/tables/${this.tableName}/records/${this.currentRecord._id}`, this.currentRecord)
           .then((res) => {
             this.$message.success('修改数据成功');
             this.fetchRecords();
@@ -107,7 +118,7 @@ export default {
           });
     },
     deleteRecord() {
-      this.axios.delete(`/tables/${this.tableName}/records/${this.currentRecord.id}`)
+      this.axios.delete(`/tables/${this.tableName}/records/${this.currentRecord._id}`)
           .then((res) => {
             this.$message.success('删除数据成功');
             this.fetchRecords();

@@ -16,6 +16,7 @@ Vue.use(iView);
 Vue.use(VueAxios, axios)
 const mockURL = 'http://mockjs.xiaoyaoji.cn/mock/1kIdEixBdMu';
 const devURL = 'http://1.15.154.241:8000/api/v1';
+export const DjangoURL = 'http://127.0.0.1:8812/api/v1';
 Vue.axios.defaults.baseURL = mockURL;
 
 Vue.config.productionTip = false

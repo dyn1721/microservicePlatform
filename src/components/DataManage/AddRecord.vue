@@ -3,7 +3,8 @@
     <a-card :title="tableName + ' 添加记录'">
       <a-form-model :model="record">
         <a-form-model-item v-for="(field, index) in tableFields"
-                           :label="field.charAt(0).toUpperCase() + field.substring(1)"
+                           v-if="field !== '_id'"
+                           :label="field"
                            :prop="field"
                            :label-col="{ span: 3, offset: 1 }" :wrapper-col="{ span: 16 }">
           <a-input v-model="record[field]">
@@ -21,6 +22,7 @@
 
 <script>
 import {Card, FormModel, Input, Button, Row, Col} from "ant-design-vue";
+import {DjangoURL} from '../../main';
 
 export default {
   name: "AddRecord",
@@ -28,9 +30,13 @@ export default {
     return {
       tableFields: [],
       record: {},
+      oldBaseURL: '',
     }
   },
   mounted() {
+    this.oldBaseURL = this.axios.defaults.baseURL;
+    this.axios.defaults.baseURL = DjangoURL;
+
     this.axios.get(`/tables/${this.tableName}/field`)
         .then((res) => {
           this.tableFields = res.data.tableFields;
@@ -38,6 +44,9 @@ export default {
         .catch((err) => {
           this.$message.error('获取表字段失败');
         });
+  },
+  destroyed() {
+    this.axios.defaults.baseURL = this.oldBaseURL;
   },
   methods: {
     createRecord() {
