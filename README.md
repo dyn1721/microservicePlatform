@@ -149,7 +149,7 @@ this.courseDetails = {
 };  
 ``` 
 
--  **列表查询某user某课程的作业记录 ( username ，courseId， taskList : [ taskId1,taskId2,taskId3 ]  )**  
+- **X ****列表查询某user某课程的作业记录 ( username ，courseId， taskList : [ taskId1,taskId2,taskId3 ]  )**   **砍了**
 -  只会在身份是学生时调用  
 查询某username对应某courseId 下 指定taskList的作业提交状态（已提交1，未提交0 ，已打分*）  
 返回同样也是对应的状态list[1,0,1```]  
