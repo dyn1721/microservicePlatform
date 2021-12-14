@@ -2,6 +2,7 @@
 
 高等软工项目 前端部分
 
+- [x] 登录/注册
 - [x] 用户管理页面
 - [x] 数据表管理页面
 - [x] 课程、作业相关页面
@@ -189,19 +190,20 @@ this.courseDetails={
 返回数据格式如：
 
 ``` 
-this.update3=[{
-					username:'AA',
-					content:"sadjksaljdslajdlsadjkla"
-				},
-				{
-					username:'BB',
-					content:"sadjksaljdslajdlsadjkla"
-				},
-				{
-					username:'CC',
-					content:"sadjksaljdslajdlsadjkla"
-				},
-				]
+this.update3 = [
+  {
+    username:'AA',
+    content:"sadjksaljdslajdlsadjkla"
+  },
+  {
+    username:'BB',
+    content:"sadjksaljdslajdlsadjkla"
+  },
+  {
+    username:'CC',
+    content:"sadjksaljdslajdlsadjkla"
+  },
+]
 ``` 
 
 - **获取某人在某课程的所有作业的提交情况(courseid,username)**
@@ -209,19 +211,20 @@ this.update3=[{
 返回某人在某课程的所有作业的提交情况
 返回数据格式如：
 ``` 
-this.update3=[{
-					taskTitle:"作业一 R301压枪教学",
-					commit:'感觉不如3030····近战'
-				},
-				{
-					taskTitle:"作业二 凤凰打电教学",
-					commit:'学会了 就是队友死太快了'
-				},
-				{
-					taskTitle:"作业四 决赛圈的终极一战处理",
-					commit:'打不到决赛圈怎么办 老师'
-				},
-				]
+this.update3 = [
+  {
+    taskTitle:"作业一 R301压枪教学",
+    commit:'感觉不如3030····近战'
+  },
+  {
+    taskTitle:"作业二 凤凰打电教学",
+    commit:'学会了 就是队友死太快了'
+  },
+  {
+    taskTitle:"作业四 决赛圈的终极一战处理",
+    commit:'打不到决赛圈怎么办 老师'
+  },
+]
 ``` 
 
 #### 软件架构
@@ -235,9 +238,6 @@ this.update3=[{
 * axios 0.18.0
 * [ant-design-vue 1.1.2 组件库](https://vuecomponent.github.io/ant-design-vue)
 * [antv/g2 3.2.7 图表库](http://g2.alipay.com/)
-
-
-
 
 #### 安装教程
 ```
@@ -265,20 +265,6 @@ serve -s dist 运行打包后的生产文件 dist 打包后的文件夹
 ```
 npm run lint
 ```
-
-#### 功能模块
-##### 登录
-包含**自动登录**判断：
-没登录直接url访问踢回登录页；
-已登录但是没勾选自动登录下次也得登录；
-勾选自动登录无需再次登录
-
-目前唯一指定账号：
-用户名 test
-密码 123
-##### 注册
-##### 注销
-可用
 
 #### 原项目
 
