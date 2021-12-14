@@ -6,7 +6,7 @@
                                             { required: true, message: '请输入邮箱地址！' },
                                             { type: 'email',message: '邮箱地址格式错误！'}
                                             ]}">
-                <a-input placeholder="邮箱" size="large" />
+                <a-input placeholder="用户名/邮箱" size="large" />
             </a-form-item>
             <a-popover placement="rightTop" :visible="visible">
                 <div style="padding: 4px 0;width:240px;" slot="content">
@@ -64,6 +64,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+import GLOBAL from '../global.js';
 import {
   Form,
   Input,
@@ -150,15 +152,19 @@ export default {
 		  //interface check: 注册(username,password) 
 		  //simulate
 		  values=this.form.getFieldsValue()
-		  var res=true;
-		  if (values['email']=='1152372646@qq.com'){
-			  res=false
-		  }
-		  if (res){this.$message.success('注册成功！');
-          this.$router.push({path:'/'})}
-		  else{
-			  this.$message.error('用户名已被注册！');
-		  }
+		  axios.get(GLOBAL.URL+'/register', {
+		            params: {
+		              username: values['email'],
+		              password: values['password'],
+		            }
+		          })
+		          .then(res => {
+		              if (res.data){this.$message.success('注册成功！');
+		              this.$router.push({path:'/'})}
+		              else{
+		              			  this.$message.error('用户名已被注册！');
+		              }
+		            })
         }
       });
     },
