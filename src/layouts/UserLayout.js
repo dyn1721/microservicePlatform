@@ -16,7 +16,7 @@ const UserLayout = {
               </span>
             </div>
             <div class="desc">
-              基于微服务架构的便捷开发平台
+              基于微服务架构的基础业务平台
             </div>
           </div>
           <router-view />

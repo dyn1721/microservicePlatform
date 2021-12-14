@@ -1,21 +1,21 @@
 <script>
-import { Menu, Icon, Spin } from "ant-design-vue";
-import { mapGetters } from "vuex";
+import {Menu, Icon, Spin} from "ant-design-vue";
+import {mapGetters} from "vuex";
 // Conversion router to menu.
 export default {
   props: {
-    collapsed: { default: false, type: Boolean },
-    theme: { default: "dark", type: String },
-    layout: { type: String },
-    mode: { default: "inline", type: String },
-    styles: { type: String }
+    collapsed: {default: false, type: Boolean},
+    theme: {default: "dark", type: String},
+    layout: {type: String},
+    mode: {default: "inline", type: String},
+    styles: {type: String}
   },
   computed: {
     ...mapGetters({
-        loading: "global/nav/loading",
-        menuData: "global/nav/getMenuData", // 获取store中数据 （vuex module）
+      loading: "global/nav/loading",
+      menuData: "global/nav/getMenuData", // 获取store中数据 （vuex module）
     }),
-    },
+  },
   components: {
     AMenu: Menu,
     AMenuItem: Menu.Item,
@@ -27,10 +27,10 @@ export default {
   methods: {
     getIcon(icon) {
       if (typeof icon === "string" && icon.indexOf("http") === 0) {
-        return <img src={icon} alt="icon" class="icon" />;
+        return <img src={icon} alt="icon" class="icon"/>;
       }
       if (typeof icon === "string") {
-        return <a-icon type={icon} />;
+        return <a-icon type={icon}/>;
       }
       // if(!icon){
       //   return <a-icon type='profile' />;
@@ -55,30 +55,30 @@ export default {
     getSubMenuOrItem(item) {
       // doc: add hideChildrenInMenu 隐藏菜单
       if (
-        item.menus &&
-        item.menus.some(menu => menu.name)
+          item.menus &&
+          item.menus.some(menu => menu.name)
       ) {
         const name = this.$t(item.locale);
         return (
-          <a-sub-menu
-            title={
-              item.icon ? (
-                <span>
+            <a-sub-menu
+                title={
+                  item.icon ? (
+                      <span>
                   {this.getIcon(item.icon)}
-                  <span>{name}</span>
+                        <span>{name}</span>
                 </span>
-              ) : (
-                name
-              )
-            }
-            key={item.path}
-          >
-            {this.getNavMenuItems(item.menus)}
-          </a-sub-menu>
+                  ) : (
+                      name
+                  )
+                }
+                key={item.path}
+            >
+              {this.getNavMenuItems(item.menus)}
+            </a-sub-menu>
         );
       }
       return (
-        <a-menu-item key={item.path}>{this.getMenuItemPath(item)}</a-menu-item>
+          <a-menu-item key={item.path}>{this.getMenuItemPath(item)}</a-menu-item>
       );
     },
     getMenuItemPath(item) {
@@ -88,17 +88,17 @@ export default {
       // // Is it a http link
       if (/^https?:\/\//.test(itemPath)) {
         return (
-          <a href={itemPath}>
-            {icon}
-            <span>{name}</span>
-          </a>
+            <a href={itemPath}>
+              {icon}
+              <span>{name}</span>
+            </a>
         );
       }
       return (
-        <router-link to={itemPath}>
-          {icon}
-          <span>{name}</span>
-        </router-link>
+          <router-link to={itemPath}>
+            {icon}
+            <span>{name}</span>
+          </router-link>
       );
     },
     conversionPath(path) {
@@ -110,7 +110,7 @@ export default {
     urlToList(url) {
       const urllist = url.split("/").filter(i => i);
       return urllist.map(
-        (urlItem, index) => `/${urllist.slice(0, index + 1).join("/")}`
+          (urlItem, index) => `/${urllist.slice(0, index + 1).join("/")}`
       );
     },
     getOpenKeys(path) {
@@ -122,23 +122,23 @@ export default {
     }
   },
   render() {
-    const { path } = this.$route;
+    const {path} = this.$route;
     const openKeys = this.getOpenKeys(path);
     return (
-      <Spin spinning={this.loading} class="baseMenuLoadding">
-      <a-menu
-        defaultOpenKeys={openKeys}
-        selectedKeys={[path]}
-        key="Menu"
-        mode={this.mode}
-        theme={this.theme}
-        collapsed={this.collapsed}
-        style={this.styles}
-      >
-        
-        {this.getNavMenuItems(this.menuData)}
-      </a-menu>
-      </Spin>
+        <Spin spinning={this.loading} class="baseMenuLoadding">
+          <a-menu
+              defaultOpenKeys={openKeys}
+              selectedKeys={[path]}
+              key="Menu"
+              mode={this.mode}
+              theme={this.theme}
+              collapsed={this.collapsed}
+              style={this.styles}
+          >
+
+            {this.getNavMenuItems(this.menuData)}
+          </a-menu>
+        </Spin>
     );
   }
 };
