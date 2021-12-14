@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+import GLOBAL from '../global.js';
 import {
   FormModel,
   Tabs,
@@ -108,10 +110,121 @@ export default {
     AIcon: Icon,
     ARow: Row,
     ACol: Col,
-    ASendCaptchaButton: SendCaptchaButton,
     AFormModel: FormModel,
     AFormModelItem: FormModel.Item,
+    ASendCaptchaButton: SendCaptchaButton
   },
+  methods: {
+    onSwithAutoLogin(e) {
+      this.autoLogin = e.target.checked;
+    },
+    onSwitchTab(key) {
+      this.active = [];
+      if (key === "1") {
+		console.log('1')
+        this.active.push("username");
+        this.active.push("password");
+      } else {
+        this.active.push("mobile");
+        this.active.push("captcha");
+      }
+    },
+    handleSubmit(e) {
+      this.form.validateFields(
+        this.active,
+        {
+          force: true
+        },
+        (err, values) => {
+          if (!err) {
+			//不知道为啥values失效- -
+			values=this.form.getFieldsValue()
+            // console.log("Received values of form: ", values);
+			// interface check: 检查账号密码（）
+			axios.get(GLOBAL.URL+'/login', {
+					params: {
+						username: values['username'],
+						password: values['password'],
+					}
+				})
+				.then(res => {
+						console.log(res.data);
+						var check=res.data;
+						if (check==1){
+							if (this.autoLogin){
+								// 本地存储自动登录密钥 时间戳+随机数
+								var timestamp = (new Date()).valueOf()+''
+								var randomAdd = parseInt(Math.random()*10000)
+								console.log(timestamp+randomAdd)
+								//  interface check: 自动登录密钥提交服务器(timestamp+randomAdd) 
+								axios.get(GLOBAL.URL+'/loginKey', {
+								          params: {
+								            username: values['username'],
+								            loginkey: timestamp+randomAdd,
+								          }
+								        })
+								        .then(res => {
+								            localStorage.setItem("username", values['username']);
+								            localStorage.setItem("autoLoginKey", timestamp+randomAdd);	
+								          })
+								}
+							this.$store.commit('global/updateUsername', values['username'])
+							this.$store.commit('global/AutoLoginChecking', true)   
+							this.$router.push({path:'/dashboard'})
+							}
+						else{
+							this.$message.error('登录检查失败 请重新输入正确的用户名和密码！');
+							this.form.setFieldsValue({
+								password:''
+							});
+						}
+					})
+          }
+        }
+      );
+    },
+    send() {
+      new Promise((resolve, reject) => {
+        this.form.validateFields(["mobile"], {}, (err, values) => {
+          if (err) {
+            reject(err);
+          } else {
+            message.loading("Action in progress..", 0);
+            setTimeout(() => {
+              this.start = true;
+              message.destroy();
+              message.success("This is a message of success code [ 4569 ]", 10);
+            }, 1000);
+          }
+        });
+      });
+    }
+  },
+  mounted() {	
+	console.log("autoLoginChecking")
+	// console.log(this.$store.state.global.autoLoginChecked)
+	var loadAutoKey = localStorage.getItem("autoLoginKey")
+	var username=localStorage.getItem("username")
+	if (loadAutoKey!= undefined){
+		//interface check: 自动登录密钥检查(username,loadAutoKey) 
+		//simulate
+		axios.get(GLOBAL.URL+'/checkLoginKey', {
+		          params: {
+		            username: username,
+		            loginkey: loadAutoKey
+		          }
+		        })
+		        .then(res => {
+					if (res.data==1){
+						this.$store.commit('global/updateUsername', username)
+						this.$store.commit('global/AutoLoginChecking', true)
+						this.$router.push({path:'/dashboard'})
+					}
+		          })
+	}
+    this.onSwitchTab();
+	
+  }
 };
 </script>
 

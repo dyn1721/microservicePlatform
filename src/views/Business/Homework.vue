@@ -7,14 +7,14 @@
 
 				<a-row>
 				      <a-col v-for="(item,i) in listData" :key="i" :span="6" style="height: 310px;">
-						  <a @click="routeCourseInfo(item.courseId)" >
+						  <a @click="routeCourseInfo(item.courseid)" >
 						  <a-card  hoverable style="width: 99%;height: 88%;" > <!-- style="width: 2400px;height: 2400px;" -->
 						        <img
 						          slot="cover"
 						          alt="example"
-						          :src="item.coverPic"
+						          :src="item.picsrc"
 						        />
-									<p class="courseTitle0">{{item.courseName}}</p>
+									<p class="courseTitle0">{{item.title}}</p>
 									<!--  <template slot="actions" class="ant-card-actions">
 									     <a-icon key="setting" type="setting" />
 									     <a-icon key="edit" type="edit" />
@@ -53,6 +53,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+import GLOBAL from '../global.js';
 import { mapGetters } from "vuex";
 import {
   Card,
@@ -122,14 +124,24 @@ export default {
 	},
 	createNewCourse(){
 		//  interface check: 新建课程( username ，courseName,courseIntro,teacher，assistant )  简化版本 安全考虑应该username存在vuex中防止修改 懒得改了
-		//simulate
-		var courseId='233'
-		this.listData.push({
-			courseName:this.update1,
-			courseId:courseId,
-			coverPic:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
-		})
-		this.$Message.success('创建课程成功！');
+		axios.get(GLOBAL.URL+'/createCourse', {
+		          params: {
+					username:localStorage.getItem("username"),
+		            coursename: this.update1,
+		            intro: this.update2,
+					teacher: this.update3,
+					assis: this.update4,
+		          }
+		        })
+		        .then(res => {
+		            var courseId=res.data
+		            this.listData.push({
+		            	title:this.update1,
+		            	courseid:courseId,
+		            	picsrc:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
+		            })
+					this.$Message.success('创建课程成功！');
+		          })
 	}
   },
   computed: {
@@ -140,55 +152,27 @@ export default {
         },
   mounted() {
 	 //  interface check: 返回账户权限( username )
-	 //simulate
-	this.visitLevel = 1; // teacher 2 student 1 
-  	console.log(this.visitLevel)
-	//interface check: 获取某用户相关的所有课程(username)
-	//simulate
-	this.listData=[    
-		{
-			courseName:'高等软件工程',
-			courseId:'1',
-			coverPic:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
-		},
-		{
-			courseName:'高等软件工程',
-			courseId:'1',
-			coverPic:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
-		},
-		{
-			courseName:'高等软件工程',
-			courseId:'1',
-			coverPic:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
-		},
-		{
-			courseName:'高等软件工程',
-			courseId:'1',
-			coverPic:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
-		},
-		{
-			courseName:'高等软件工程',
-			courseId:'1',
-			coverPic:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
-		},
-		{
-			courseName:'高等软件工程',
-			coverPic:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
-		},
-		{
-			courseName:'高等软件工程',
-			coverPic:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
-		},
-		{
-			courseName:'高等软件工程',
-			coverPic:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
-		},
-		{
-			courseName:'操作系统',
-			courseId:'2',
-			coverPic:'https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png'
-		}
-	]
+	 var username=localStorage.getItem("username")
+	 axios.get(GLOBAL.URL+'/level', {
+	           params: {
+	             username: username
+	           }
+	         })
+	         .then(res => {
+	             this.visitLevel = res.data;
+				 console.log(this.visitLevel);
+				 //interface check: 获取某用户相关的所有课程(username)
+				 axios.get(GLOBAL.URL+'/courses', {
+				           params: {
+				             username: username,
+				           }
+				         })
+				         .then(res => {
+							 this.listData=res.data;
+				             console.log(res.data)
+				           })
+	           })
+	
   }
 };
 </script>

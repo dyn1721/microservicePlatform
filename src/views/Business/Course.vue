@@ -7,7 +7,7 @@
 
 						<a-row>
 							<a-col :span="8" style="height: 300px;">
-								<img class='detailCoverPic' :src="courseDetails.picSrc" />
+								<img class='detailCoverPic' :src="courseDetails.picsrc" />
 								<a-button @click="courseModify" v-show="ifTeacher" type="primary" size="default" style=" position: absolute; top:95%;left: 100px;width: 140px; ">
 									修改课程信息
 								</a-button>
@@ -118,9 +118,9 @@
 					<a-tab-pane key="homeworks" :tab="$t('business.homework.homeworks')">
 						<Card v-for="(item,i) in courseDetails.task" :key="'task'+i" style="height: 200px;">
 							<img :src="item.iconSrc" style=" position: absolute; top:30px;left: 30px; height: 70px;" />
-							<p style=" position: absolute; top:30px;left: 120px; font-size: 18px;"> {{item.taskTitle}} </p>
+							<p style=" position: absolute; top:30px;left: 120px; font-size: 18px;"> {{item.tasktitle}} </p>
 							<hr noshade size=1 color=#dfe2df width=300 style=" position: absolute; top:60px;left: 120px; ">
-							<p style=" position: absolute; top:70px;left: 120px; font-size: 14px;width: 75%;"> {{item.taskIntro}} </p>
+							<p style=" position: absolute; top:70px;left: 120px; font-size: 14px;width: 75%;"> {{item.taskintro}} </p>
 							<img v-show="ifStudent" :src="item.status" style=" position: absolute; top:30%;right: 30px; height: 70px;" />
 							<a-button @click='submitHomework(item,i)'  v-show="ifStudent" type="primary"  style=" position: absolute; top: 72%;right: 29px;width: 70px; ">
 								提交
@@ -171,6 +171,8 @@
 </template>
 
 <script>
+	import axios from 'axios';
+	import GLOBAL from '../global.js';
 	import {
 		mapGetters
 	} from "vuex";
@@ -294,9 +296,17 @@
 			submitCourseModify() {
 				//interface check: 修改课程信息(courseid,title,intro)
 				//simulate
-				var res = 1;
-				this.courseDetails.title = this.update1
-				this.courseDetails.intro = this.update2
+				axios.get(GLOBAL.URL+'/modifyCourseInfo', {
+				          params: {
+				            courseid: this.courseID,
+				            title: this.update1,
+							intro:this.update2
+				          }
+				        })
+				        .then(res => {
+				            this.courseDetails.title = this.update1
+				            this.courseDetails.intro = this.update2
+				          })
 				this.courseModifyVisible = false;
 			},
 			courseInfoModify() {
@@ -305,16 +315,22 @@
 			},
 			submitCourseInfoModify() {
 				//interface check: 修改课程最新通知(courseid,notice)
-				//simulate
-				var res = 1;
-				this.courseDetails.notice = this.update1
+				axios.get(GLOBAL.URL+'/modifyCourseNotice', {
+				          params: {
+				            courseid: this.courseID,
+				            notice: this.update1,
+				          }
+				        })
+				        .then(res => {
+				            this.courseDetails.notice = this.update1
+				          })
 				this.courseNoticeModifyVisible = false;
 			},
 			homeworkModify(item){
 				console.log(item)
-				this.update1 =item.taskTitle
-				this.update2 =item.taskIntro
-				this.update3 =item.taskId
+				this.update1 =item.tasktitle
+				this.update2 =item.taskintro
+				this.update3 =item.taskid
 				this.homeworkModifyVisible = true;
 			},
 			homeworkModifySubmit(){
@@ -344,9 +360,9 @@
 				this.submitVisiblePersonal = true;
 			},
 			submitShow(item){
-				this.update1 =item.taskTitle
-				this.update2 =item.taskIntro
-				this.update3 =item.taskId
+				this.update1 =item.tasktitle
+				this.update2 =item.taskintro
+				this.update3 =item.taskid
 				//interface check: 获取某作业的提交情况(courseid,taskid)
 				//simulate
 				this.update3=[{
@@ -369,9 +385,9 @@
 				//simulate
 				var taskId='233'
 				this.courseDetails.task.push({
-					taskId: taskId,
-					taskTitle: this.update1,
-					taskIntro: this.update2,
+					taskid: taskId,
+					tasktitle: this.update1,
+					taskintro: this.update2,
 					iconSrc: require('../../assets/ran' + (Math.floor(Math.random() * 4) + 1) + '.png')
 				})
 				this.$Message.success('创建作业成功！');
@@ -408,113 +424,130 @@
 			console.log(this.$route.query.courseid)
 			this.$message.success(this.$route.query.courseid);
 			this.courseID = this.$route.query.courseid;
-			//  interface check: 返回某课程的详细数据( courseID ，username )
-			//simulate
-			this.visitLevel = 1; // teacher 2 student 1 none 0（踢回）
-			this.courseDetails = {
-				title: 'APEX：从落地重伤到顶猎乱杀',
-				courseId: '1',
-				picSrc: "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png",
-				intro: "301歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子",
-				teacher: "卡莎", //list ["张三"]
-				assistant: "白字 火神", // list ["aa"]
-				notice: "还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了",
-				task: [{
-						taskId: '1',
-						taskTitle: '作业一 R301压枪教学',
-						taskIntro: '关于我一梭子只能打11这件事'
-					},
-					{
-						taskId: '2',
-						taskTitle: '作业二 凤凰打电教学',
-						taskIntro: '如何让队友帮你顶住10s'
-					},
-					{
-						taskId: '3',
-						taskTitle: '作业三 碎片西部实战教学',
-						taskIntro: '落地一把波塞克 装备全靠打落地一把波塞克 装备全靠打落地一把波塞克 装备全靠打落地一把波塞克 装备全靠打落地一把波塞克 装备全靠打落地一把波塞克 装备全靠打落地一把波塞克 装备全靠打落地一把波塞克 装备全靠打'
-					},
-					{
-						taskId: '4',
-						taskTitle: '作业四 决赛圈的终极一战处理',
-						taskIntro: '还在人云亦云 拾人牙慧？ 教你打apex 告诉你决赛圈如何3个蓝甲打3个红甲！还在人云亦云 拾人牙慧？ 教你打apex 告诉你决赛圈如何3个蓝甲打3个红甲！还在人云亦云 拾人牙慧？ 教你打apex 告诉你决赛圈如何3个蓝甲打3个红甲！还在人云亦云 拾人牙慧？ 教你打apex 告诉你决赛圈如何3个蓝甲打3个红甲！还在人云亦云 拾人牙慧？ 教你打apex 告诉你决赛圈如何3个蓝甲打3个红甲！还在人云亦云 拾人牙慧？ 教你打apex 告诉你决赛圈如何3个蓝甲打3个红甲！'
-					}
-				],
-				studentList: [
-					{
-							username: '宁神',
-							intro: 'apex马枪之神 北航摸鱼王',
-							gender: 'sir'
-						},
-					{
-							username: '胡神',
-							intro: 'apex密客专精 众神殿永远嘀神之一',
-							gender: 'sir'
-						},
-					{
-							username: 'SCYU',
-							intro: '批站认证：北航第一虚拟主播 2021年百大up猪',
-							gender: 'sir'
-						},
-					{
-						username: '卡卡国大孝子',
-						intro: 'apex我只认卡神！',
-						gender: 'sir'
-					},
-					{
-						username: '火烧俱乐部',
-						intro: '注意米线！',
-						gender: 'sir'
-					},
-					{
-						username: '十年老OP',
-						intro: '刻晴和胡桃大伙不好选吧！',
-						gender: 'sir'
-					},
-					{
-						username: '犹如幻翳',
-						intro: '该账号已封禁',
-						gender: 'sir'
-					},
-					{
-						username: '嘉心糖都是神',
-						intro: '好像当嘉然小姐的狗啊',
-						gender: 'miss'
-					},
-					{
-						username: 'otto',
-						intro: '大家好啊 我叫电棍',
-						gender: 'sir'
-					},
-					{
-						username: '炫√',
-						intro: '我是狗？我是炫公主！',
-						gender: 'miss'
-					},
-					{
-						username: '山泥若',
-						intro: '只能阴间再见了',
-						gender: 'sir'
-					},
-				]
-			};
-			//  interface check: 列表查询某user某课程的作业记录 ( username ，courseId， taskList : [ taskId1,taskId2,taskId3 ]  )
-			//simulate
-			if (this.visitLevel == 1) {
-				var result = [1, 0, 1,0];
-				for (var i = 0; i < this.courseDetails.task.length; i++) {
-					if (result[i] == 1) {
-						this.courseDetails.task[i]['status'] = require('../../assets/complete.png');
-					} else if (result[i] == 0) {
-						this.courseDetails.task[i]['status'] = require('../../assets/out.png');
-					}
-				}
-			}
-
-			//config Icon
-			for (var i = 0; i < this.courseDetails.task.length; i++) {
-				this.courseDetails.task[i]['iconSrc'] = require('../../assets/ran' + (Math.floor(Math.random() * 4) + 1) + '.png');
-			}
+			var username=localStorage.getItem("username")
+			axios.get(GLOBAL.URL+'/level', {
+			          params: {
+			            username: username
+			          }
+			        })
+			        .then(res => {
+			            this.visitLevel = res.data;
+						//  interface check: 返回某课程的详细数据( courseID ，username )
+						axios.get(GLOBAL.URL+'/courseInfo', {
+						          params: {
+						            courseid: this.courseID,
+						            username: username,
+						          }
+						        })
+						        .then(res => {
+						            this.courseDetails=res.data;
+									//  interface check: 列表查询某user某课程的作业记录 ( username ，courseId， taskList : [ taskId1,taskId2,taskId3 ]  )
+									//simulate  已取消
+									if (this.visitLevel == 1) {
+										// var result = [1, 0, 1,0];
+										for (var i = 0; i < this.courseDetails.task.length; i++) {
+											this.courseDetails.task[i]['status'] = require('../../assets/out.png');
+											// if (result[i] == 1) {
+											// 	this.courseDetails.task[i]['status'] = require('../../assets/complete.png');
+											// } else if (result[i] == 0) {
+											// 	this.courseDetails.task[i]['status'] = require('../../assets/out.png');
+											// }
+										}
+									}
+									//config Icon
+									for (var i = 0; i < this.courseDetails.task.length; i++) {
+										this.courseDetails.task[i]['iconSrc'] = require('../../assets/ran' + (Math.floor(Math.random() * 4) + 1) + '.png');
+									}
+						          })
+						// this.courseDetails = {
+						// 	title: 'APEX：从落地重伤到顶猎乱杀',
+						// 	courseId: '1',
+						// 	picSrc: "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png",
+						// 	intro: "301歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子",
+						// 	teacher: "卡莎", //list ["张三"]
+						// 	assistant: "白字 火神", // list ["aa"]
+						// 	notice: "还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了",
+						// 	task: [{
+						// 			taskId: '1',
+						// 			taskTitle: '作业一 R301压枪教学',
+						// 			taskIntro: '关于我一梭子只能打11这件事'
+						// 		},
+						// 		{
+						// 			taskId: '2',
+						// 			taskTitle: '作业二 凤凰打电教学',
+						// 			taskIntro: '如何让队友帮你顶住10s'
+						// 		},
+						// 		{
+						// 			taskId: '3',
+						// 			taskTitle: '作业三 碎片西部实战教学',
+						// 			taskIntro: '落地一把波塞克 装备全靠打落地一把波塞克 装备全靠打落地一把波塞克 装备全靠打落地一把波塞克 装备全靠打落地一把波塞克 装备全靠打落地一把波塞克 装备全靠打落地一把波塞克 装备全靠打落地一把波塞克 装备全靠打'
+						// 		},
+						// 		{
+						// 			taskId: '4',
+						// 			taskTitle: '作业四 决赛圈的终极一战处理',
+						// 			taskIntro: '还在人云亦云 拾人牙慧？ 教你打apex 告诉你决赛圈如何3个蓝甲打3个红甲！还在人云亦云 拾人牙慧？ 教你打apex 告诉你决赛圈如何3个蓝甲打3个红甲！还在人云亦云 拾人牙慧？ 教你打apex 告诉你决赛圈如何3个蓝甲打3个红甲！还在人云亦云 拾人牙慧？ 教你打apex 告诉你决赛圈如何3个蓝甲打3个红甲！还在人云亦云 拾人牙慧？ 教你打apex 告诉你决赛圈如何3个蓝甲打3个红甲！还在人云亦云 拾人牙慧？ 教你打apex 告诉你决赛圈如何3个蓝甲打3个红甲！'
+						// 		}
+						// 	],
+						// 	studentList: [
+						// 		{
+						// 				username: '宁神',
+						// 				intro: 'apex马枪之神 北航摸鱼王',
+						// 				gender: 'sir'
+						// 			},
+						// 		{
+						// 				username: '胡神',
+						// 				intro: 'apex密客专精 众神殿永远嘀神之一',
+						// 				gender: 'sir'
+						// 			},
+						// 		{
+						// 				username: 'SCYU',
+						// 				intro: '批站认证：北航第一虚拟主播 2021年百大up猪',
+						// 				gender: 'sir'
+						// 			},
+						// 		{
+						// 			username: '卡卡国大孝子',
+						// 			intro: 'apex我只认卡神！',
+						// 			gender: 'sir'
+						// 		},
+						// 		{
+						// 			username: '火烧俱乐部',
+						// 			intro: '注意米线！',
+						// 			gender: 'sir'
+						// 		},
+						// 		{
+						// 			username: '十年老OP',
+						// 			intro: '刻晴和胡桃大伙不好选吧！',
+						// 			gender: 'sir'
+						// 		},
+						// 		{
+						// 			username: '犹如幻翳',
+						// 			intro: '该账号已封禁',
+						// 			gender: 'sir'
+						// 		},
+						// 		{
+						// 			username: '嘉心糖都是神',
+						// 			intro: '好像当嘉然小姐的狗啊',
+						// 			gender: 'miss'
+						// 		},
+						// 		{
+						// 			username: 'otto',
+						// 			intro: '大家好啊 我叫电棍',
+						// 			gender: 'sir'
+						// 		},
+						// 		{
+						// 			username: '炫√',
+						// 			intro: '我是狗？我是炫公主！',
+						// 			gender: 'miss'
+						// 		},
+						// 		{
+						// 			username: '山泥若',
+						// 			intro: '只能阴间再见了',
+						// 			gender: 'sir'
+						// 		},
+						// 	]
+						// };
+	
+			          })
 		}
 	};
 </script>
