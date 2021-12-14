@@ -15,9 +15,9 @@ const router = new Router({
       path: '/user',
       component: UserLayout,
       children: [
-        { path: '/user', redirect: '/user/login' },
-        { path: '/user/login', component: () => import('@/views/User/Login') },
-        { path: '/user/register', component: () => import('@/views/User/Register') },
+        {path: '/user', redirect: '/user/login'},
+        {path: '/user/login', component: () => import('@/views/User/Login')},
+        {path: '/user/register', component: () => import('@/views/User/Register')},
       ],
     },
     // app
@@ -32,45 +32,44 @@ const router = new Router({
           name: 'dashboard',
           component: BlankLayout,
           children: [
-            { path: '/dashboard/analysis', name: 'analysis', component: () => import('@/views/Dashboard/Analysis') },
-            // { path: '/dashboard/monitor', name: 'monitor', component: () => import('@/views/Dashboard/Analysis') },
-            { path: '/dashboard/workplace', name: 'workplace', component: () => import('@/views/Dashboard/Workplace') },
+            {path: '/dashboard/analysis', name: 'analysis', component: () => import('@/views/Dashboard/Analysis')},
+            {path: '/dashboard/workplace', name: 'workplace', component: () => import('@/views/Dashboard/Workplace')},
           ]
         },
-		{
-		  path: '/business',
-		  name: 'business',
-		  component: BlankLayout,
-		  children: [
-		    { path: '/business/homework', 
-				name: 'homework', 
-				component: () => import('@/views/Business/Homework'),
-				 children:[
-					 
-				 ]
-				 },
-			{path: '/business/courseInfo',
-			 name: 'courseInfo', 
-			 component: () => import('@/views/Business/Course')
-			} 
-		    // { path: '/dashboard/monitor', name: 'monitor', component: () => import('@/views/Dashboard/Analysis') },
-		  ]
-		},
+        {
+          path: '/business',
+          name: 'business',
+          component: BlankLayout,
+          children: [
+            {
+              path: '/business/homework',
+              name: 'homework',
+              component: () => import('@/views/Business/Homework'),
+              children: []
+            },
+            {
+              path: '/business/courseInfo',
+              name: 'courseInfo',
+              component: () => import('@/views/Business/Course')
+            }
+            // { path: '/dashboard/monitor', name: 'monitor', component: () => import('@/views/Dashboard/Analysis') },
+          ]
+        },
         {
           path: '/system',
           name: 'system',
           component: BlankLayout,
           children: [
-			{
-			  path: '/system/journal',
-			  name: 'journal',
-			  component: () => import('@/views/System/Journal')
-			},
-			{
-			  path: '/system/data',
-			  name: 'data',
-			  component: () => import('@/views/System/Data')
-			},
+            {
+              path: '/system/journal',
+              name: 'journal',
+              component: () => import('@/views/System/Journal')
+            },
+            {
+              path: '/system/data',
+              name: 'data',
+              component: () => import('@/views/System/Data')
+            },
             {
               path: '/system/role',
               name: 'role',
@@ -81,7 +80,6 @@ const router = new Router({
         },
       ]
     },
-
   ]
 })
 

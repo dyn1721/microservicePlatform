@@ -1,19 +1,23 @@
 <template>
-  <a-layout-sider v-model="collapsed" width="256" :class="`ai-sider-menu sider ${fixSiderbar?'fixSiderbar':'',settings.navTheme==='light'?'light':'dark'}`" :theme="settings.navTheme">
+  <a-layout-sider v-model="collapsed" width="256"
+                  :class="`ai-sider-menu sider ${fixSiderbar?'fixSiderbar':'',settings.navTheme==='light'?'light':'dark'}`"
+                  :theme="settings.navTheme">
     <div class="logo" key="logo" id="logo">
       <router-link to="/">  <!-- router路由（等同a标签） -->
-        <img :src="logo" alt="logo" />
+        <img :src="logo" alt="logo"/>
         <h1>MICRO UNITE</h1>
       </router-link>
     </div>
-    <a-base-menu :collapsed="collapsed" :theme="settings.navTheme" :layout="settings.layout" styles="padding: '16px 0'; width: '100%'"/>
+    <a-base-menu :collapsed="collapsed" :theme="settings.navTheme" :layout="settings.layout"
+                 styles="padding: '16px 0'; width: '100%'"/>
   </a-layout-sider>
 </template>
 
 <script>
-import { Layout } from "ant-design-vue";
+import {Layout} from "ant-design-vue";
 import ABaseMenu from "@/components/SiderMenu/BaseMenu";
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
+
 export default {
   props: {
     collapsed: {
@@ -24,7 +28,7 @@ export default {
       default: false,
       type: Boolean
     },
-    logo: { type: String }
+    logo: {type: String}
   },
   computed: {
     ...mapGetters({

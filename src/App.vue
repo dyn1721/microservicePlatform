@@ -1,11 +1,14 @@
 <template>
-   <LocaleProvider :locale='locale' > <!-- 国际化支持 -->
-        <div class='root'><router-view /></div>
-     </LocaleProvider>
+  <LocaleProvider :locale='locale'> <!-- 国际化支持 -->
+    <div class='root'>
+      <router-view/>
+    </div>
+  </LocaleProvider>
 </template>
 
 <script>
-import { LocaleProvider } from "ant-design-vue";
+import {LocaleProvider} from "ant-design-vue";
+
 export default {
   components: {
     LocaleProvider
@@ -15,8 +18,8 @@ export default {
       return this.$i18n.messages[this.$i18n.locale];
     }
   },
-   mounted() {
-	 
+  mounted() {
+
   }
 };
 </script>

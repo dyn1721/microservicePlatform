@@ -61,25 +61,26 @@
             </a-form-item>
         </a-form>
     </div>
+
 </template>
 
 <script>
 import axios from 'axios';
 import GLOBAL from '../global.js';
 import {
-  Form,
+  FormModel,
   Input,
   Icon,
   Checkbox,
   Row,
   Col,
   Button,
-  message,
   Popover,
   Progress,
   Select
 } from "ant-design-vue";
 import SendCaptchaButton from "@/components/SendCaptchaButton";
+
 export default {
   name: "ai-register",
   data: () => ({
@@ -88,25 +89,28 @@ export default {
     start: false,
     passwordStatus: "poor",
     passwordProgressPercent: 0,
-    passwordProgressStatus: "active"
+    passwordProgressStatus: "active",
+    registerInfo: {},
   }),
-  components: {
-    AForm: Form,
-    AFormItem: Form.Item,
-    AButton: Button,
-    ACheckbox: Checkbox,
-    AInput: Input,
-    AInputGroup: Input.Group,
-    AIcon: Icon,
-    ARow: Row,
-    ACol: Col,
-    ASendCaptchaButton: SendCaptchaButton,
-    APopover: Popover,
-    AProgress: Progress,
-    ASelect: Select,
-    ASelectOption: Select.Option
-  },
   methods: {
+    submitRegister() {
+      if (!this.registerInfo.username || !this.registerInfo.password || !this.registerInfo.confirm) {
+        this.$message.error('请填写所有字段');
+        return;
+      }
+      if (this.registerInfo.password !== this.registerInfo.confirm) {
+        this.$message.error('两次输入的密码不一致');
+        return;
+      }
+      this.axios.post(`/register`, this.registerInfo)
+          .then((res) => {
+            this.$message.success('注册成功');
+            this.$router.push({ path: '/' });
+          })
+          .catch((err) => {
+            this.$message.error('用户名已被注册');
+          });
+    },
     checkPassword(rule, value, callback) {
       if (!value) {
         this.help = "请输入密码！";
@@ -114,7 +118,7 @@ export default {
         callback("error");
       } else {
         this.passwordProgressPercent =
-          value.length * 10 > 100 ? 100 : value.length * 10;
+            value.length * 10 > 100 ? 100 : value.length * 10;
         if (value && value.length > 5) {
           this.passwordStatus = "pass";
           this.passwordProgressStatus = "active";
@@ -138,6 +142,7 @@ export default {
         }
       }
     },
+
     checkConfirm(rule, value, callback) {
       if (value && value !== this.form.getFieldValue("password")) {
         callback("两次输入的密码不匹配!");
@@ -185,6 +190,7 @@ export default {
     //   });
     // }
   }
+
 };
 </script>
 <style lang="less">
