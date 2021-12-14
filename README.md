@@ -3,10 +3,10 @@
 高等软工项目 前端部分
 
 - [x] 登录/注册
-- [x] 用户管理页面
-- [x] 数据表管理页面
+- [x] 查看日志
+- [x] 用户管理
+- [x] 数据表管理
 - [x] 课程、作业相关页面
-- [ ] 查看日志页面 (需明确后端日志内容与格式)
 
 #### DLC模块
 - **暂时或者永远都不需要搞的 ：**
@@ -113,42 +113,41 @@ listData: [
 例如 0 无任何权限（不返回课程数据）； 1 学生（并返回该课程简介 通知 任务列表和课程学生等相关数据） 2 老师（并返回课程相关数据）  
 返回数据如：  
 ```js
-this.courseDetails={  
-				title: 'APEX：从落地重伤到顶猎乱杀',  
-				visitLevel:'2', //该账户的访问权限
-				courseId:'1',  
-				picSrc: "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png",  
-				intro: "301歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子",  
-				teacher: "卡莎" 青野", //简化为String  
-				assistant: "白字 火神",  // 简化为String   
-				notice:"还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了",    
-				task:[  
-					{  
-						taskId:'1',  
-						taskTitle:'作业一 R301压枪教学',  
-						taskIntro:'关于我一梭子只能打11这件事'  
-					},  
-					{  
-						taskId:'2',  
-						taskTitle:'作业二 凤凰打电教学',  
-						taskIntro:'如何让队友帮你顶住10s'  
-					},  
-				],  
-				studentList:[  
-					{  
-						username:'卡卡国大孝子',  
-						intro:'apex我只认卡神！',  
-						gender:'sir'  
-					},  
-					{  
-						username:'火烧俱乐部',  
-						intro:'注意米线！',  
-						gender:'miss'  
-					},  
-				]  
-			};  
+this.courseDetails = {  
+  title: 'APEX：从落地重伤到顶猎乱杀',  
+  visitLevel:'2', //该账户的访问权限
+  courseId:'1',  
+  picSrc: "https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png",  
+  intro: "301歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死歪歪滴爱死绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子绝绝子",  
+  teacher: "卡莎" 青野", //简化为String  
+  assistant: "白字 火神",  // 简化为String   
+  notice:"还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了还没交作业二的该打打了",    
+  task: [ 
+    {  
+      taskId: '1',  
+      taskTitle: '作业一 R301压枪教学',  
+      taskIntro: '关于我一梭子只能打11这件事'  
+    },  
+    {  
+      taskId: '2',  
+      taskTitle: '作业二 凤凰打电教学',  
+      taskIntro: '如何让队友帮你顶住10s'  
+    },  
+  ],  
+  studentList: [  
+    {  
+      username: '卡卡国大孝子',  
+      intro: 'apex我只认卡神！',  
+      gender: 'sir'  
+    },  
+    {  
+      username: '火烧俱乐部',  
+      intro: '注意米线！',  
+      gender: 'miss'
+    },  
+  ]  
+};  
 ``` 
-
 
 -  **列表查询某user某课程的作业记录 ( username ，courseId， taskList : [ taskId1,taskId2,taskId3 ]  )**  
 -  只会在身份是学生时调用  
@@ -189,7 +188,7 @@ this.courseDetails={
 返回该课程该作业的所有提交记录    
 返回数据格式如：
 
-``` 
+```js
 this.update3 = [
   {
     username:'AA',
@@ -210,7 +209,8 @@ this.update3 = [
 - 只会在身份是老师时调用   
 返回某人在某课程的所有作业的提交情况
 返回数据格式如：
-``` 
+
+``` js
 this.update3 = [
   {
     taskTitle:"作业一 R301压枪教学",
