@@ -79,6 +79,9 @@
 import axios from 'axios';
 import GLOBAL from '../global.js';
 import {
+  Popover,
+  Progress,
+  Select,
   Form,
   Tabs,
   Input,
@@ -115,7 +118,21 @@ export default {
       AIcon: Icon,
       ARow: Row,
       ACol: Col,
-      ASendCaptchaButton: SendCaptchaButton
+      ASendCaptchaButton: SendCaptchaButton,  
+	  AForm: Form,
+	  AFormItem: Form.Item,
+	  AButton: Button,
+	  ACheckbox: Checkbox,
+	  AInput: Input,
+	  AInputGroup: Input.Group,
+	      AIcon: Icon,
+	      ARow: Row,
+	      ACol: Col,
+	      ASendCaptchaButton: SendCaptchaButton,
+	      APopover: Popover,
+	      AProgress: Progress,
+	      ASelect: Select,
+	      ASelectOption: Select.Option
     },
   methods: {
     onSwithAutoLogin(e) {

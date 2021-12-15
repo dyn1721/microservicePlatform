@@ -32,27 +32,6 @@
                                             ]}">
                 <a-input type="password" placeholder="确认密码" size="large" />
             </a-form-item>
-           <!-- <a-form-item fieldDecoratorId="mobile" :fieldDecoratorOptions="{rules: [
-                                            { required: true, message: '请输入手机号！' },
-                                            { pattern: /^1\d{10}$/, message: '手机号格式错误！' },
-                                            ]}">
-                <a-input placeholder="11位手机号" size="large">
-                    <a-select slot="addonBefore" defaultValue="+86" style="width: 90px">
-                        <a-select-option value="86">+86</a-select-option>
-                        <a-select-option value="87">+87</a-select-option>
-                    </a-select>
-                </a-input>
-            </a-form-item>
-            <a-form-item fieldDecoratorId="captcha" :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入验证码!' }]}">
-                <a-row :gutter="8">
-                    <a-col :span="16">
-                        <a-input placeholder="验证码" size="large"/>
-                    </a-col>
-                    <a-col :span="8">
-                        <a-send-captcha-button v-model="start" @click="send" :second="120" class="getCaptcha"  storageKey="SendCaptchaStorageRegisterKey" size="large" />
-                    </a-col>
-                </a-row>
-            </a-form-item> -->
             <a-form-item>
                 <a-button size="large" class="submit" type="primary" htmlType="submit">
                 登录
@@ -68,16 +47,17 @@
 import axios from 'axios';
 import GLOBAL from '../global.js';
 import {
-  FormModel,
-  Input,
-  Icon,
-  Checkbox,
-  Row,
-  Col,
-  Button,
-  Popover,
-  Progress,
-  Select
+   Form,
+    Input,
+    Icon,
+    Checkbox,
+    Row,
+    Col,
+    Button,
+    message,
+    Popover,
+    Progress,
+    Select
 } from "ant-design-vue";
 import SendCaptchaButton from "@/components/SendCaptchaButton";
 
@@ -92,6 +72,22 @@ export default {
     passwordProgressStatus: "active",
     registerInfo: {},
   }),
+  components: {
+    AForm: Form,
+        AFormItem: Form.Item,
+        AButton: Button,
+        ACheckbox: Checkbox,
+        AInput: Input,
+        AInputGroup: Input.Group,
+        AIcon: Icon,
+        ARow: Row,
+        ACol: Col,
+        ASendCaptchaButton: SendCaptchaButton,
+        APopover: Popover,
+        AProgress: Progress,
+        ASelect: Select,
+        ASelectOption: Select.Option
+   },
   methods: {
     submitRegister() {
       if (!this.registerInfo.username || !this.registerInfo.password || !this.registerInfo.confirm) {
