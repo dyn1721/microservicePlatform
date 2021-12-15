@@ -103,7 +103,7 @@ listData: [
 新建课程到该老师账号名下 （添加助教老师权限操作**通过权限管理模块**实现）    
 创建成功返回courseId 失败返回失败标志  
 
-- **新建作业( username ，courseId,taskname,taskIntro )**
+-OK **新建作业( username ，courseId,taskname,taskIntro )**
 - 只会在身份是老师时调用  
 新建作业到该老师账号该课程名下 （添加助教老师权限操作**通过权限管理模块**实现）      
 创建成功返回taskId 失败返回失败标志    
@@ -167,11 +167,11 @@ this.courseDetails = {
 - 只会在身份是老师时调用    
 修改指定课程通知字段属性 返回修改结果  
 
-- **修改作业信息(courseid,taskid,tasktitle，taskinfo)**  
+-OK **修改作业信息(courseid,taskid,tasktitle，taskinfo)**  
 - 只会在身份是老师时调用  
 修改指定课程指定任务的标题和简介字段属性 返回修改结果
 
-- **删除课程(courseid)**
+-OK **删除课程(courseid)**
 - 只会在身份是老师时调用  
 修改数据库中与该课程相关所有数据 返回修改结果
 
