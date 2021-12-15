@@ -52,14 +52,14 @@
 							</Drawer>
 							<Drawer :title="update1+'的提交情况'" v-model="submitVisible" width="1020" :mask-closable="false">
 								<Card v-for="(item,i) in update3" :key="'submit'+i" style="height: 100px;">
-								<p style="font-size: 25px; position: absolute; left: 20px; top:30px;font-weight: bold; ">{{item.username}}:</p>
-								<p style="font-size: 22px; position: absolute; right: 20px; top:30px;font-style:oblique ; ">" {{item.content}} "</p>
+								<p style="font-size: 25px; position: absolute; left: 20px; top:30px;font-weight: bold; ">{{item.userid}}:</p>
+								<p style="font-size: 22px; position: absolute; right: 20px; top:30px;font-style:oblique ; ">" {{item.submit}} "</p>
 								</Card>
 							</Drawer>
 							<Drawer :title="update1+'的提交情况'" v-model="submitVisiblePersonal" width="1020" :mask-closable="false">
 								<Card v-for="(item,i) in update3" :key="'submit'+i" style="height: 100px;">
-								<p style="font-size: 25px; position: absolute; left: 20px; top:30px;font-weight: bold; ">{{item.taskTitle}}:</p>
-								<p style="font-size: 22px; position: absolute; right: 20px; top:30px;font-style:oblique ; ">" {{item.commit}} "</p>
+								<p style="font-size: 25px; position: absolute; left: 20px; top:30px;font-weight: bold; ">{{item.taskid}}:</p>
+								<p style="font-size: 22px; position: absolute; right: 20px; top:30px;font-style:oblique ; ">" {{item.submit}} "</p>
 								</Card>
 							</Drawer>
 							<Drawer :title="'提交: '+update2" v-model="submitHwVisible" width="620" :mask-closable="false">
@@ -129,10 +129,10 @@
 							<a-button v-show="ifTeacher" @click="submitShow(item)" type="primary"style=" position: absolute; top:20%;right: 29px;width: 100px; ">
 								提交情况
 							</a-button>
-							<a-button v-show="ifTeacher"  @click="homeworkModify(item)" type="primary"  style=" position: absolute; top: 40%;right: 29px;width: 100px; ">
+							<a-button v-show="ifTeacher"  @click="homeworkModify(item,i)" type="primary"  style=" position: absolute; top: 40%;right: 29px;width: 100px; ">
 								修改作业
 							</a-button>
-							<a-button @click="deleteHomeworkWarn" v-show="ifTeacher" type="danger"  style=" position: absolute; top: 60%;right: 29px;width: 100px; ">
+							<a-button @click="deleteHomeworkWarn(item,i)" v-show="ifTeacher" type="danger"  style=" position: absolute; top: 60%;right: 29px;width: 100px; ">
 								删除作业
 							</a-button>
 						</Card>
@@ -146,7 +146,7 @@
 							<a-button  @click="submitShowPersonal(item)"  v-show="ifTeacher" type="primary"  style=" position: absolute; top:30%;right: 150px;width: 100px; ">
 								作业情况
 							</a-button>
-							<a-button @click="deleteStudentWarn" v-show="ifTeacher" type="danger" style=" position: absolute; top:30%;right: 29px;width: 100px; ">
+							<a-button @click="deleteStudentWarn(item,i)" v-show="ifTeacher" type="danger" style=" position: absolute; top:30%;right: 29px;width: 100px; ">
 								删除学生
 							</a-button>
 						</Card>
@@ -252,36 +252,60 @@
 					content: '<p>你确定要删除该课程？</p><p>该操作可能不可逆，请确认</p>',
 					onOk: () => {
 						//interface check: 删除课程(courseid)
-						//simulate
-						this.$Message.info('delete ok');
+						axios.get(GLOBAL.URL+'/deleteCourse', {
+						          params: {
+						            courseid: this.courseID,
+						          }
+						        })
+						        .then(res => {
+						            this.$Message.info('delete ok');
+									this.$router.push({path:'/dashboard'})
+						          })
+						
 					},
 					onCancel: () => {
 						this.$Message.info('delete cancel');
 					}
 				});
 			},
-			deleteHomeworkWarn(){
+			
+			deleteHomeworkWarn(item,i){
 				this.$Modal.confirm({
 					title: '重要操作提示',
 					content: '<p>你确定要删除该作业？</p><p>该操作可能不可逆，请确认</p>',
 					onOk: () => {
 						//interface check: 删除作业(courseid,taskid)
-						//simulate
-						this.$Message.info('delete ok');
+						axios.get(GLOBAL.URL+'/deleteTask', {
+						          params: {
+						            taskid: item.taskid,
+						          }
+						        })
+						        .then(res => {
+									this.courseDetails.task.splice(i, 1)　
+						            this.$Message.info('delete ok');
+						          })
 					},
 					onCancel: () => {
 						this.$Message.info('delete cancel');
 					}
 				});
 			},
-			deleteStudentWarn(){
+			deleteStudentWarn(item,i){
 				this.$Modal.confirm({
 					title: '重要操作提示',
 					content: '<p>你确定要删除该学生？</p><p>该操作可能不可逆，请确认</p>',
 					onOk: () => {
-						//interface check: 删除学生(courseid,username)
-						//simulate
-						this.$Message.info('delete ok');
+						//interface check: 删除学生(courseid,username) courseDetails.studentList
+						axios.get(GLOBAL.URL+'/deleteStudent', {
+						          params: {
+						            courseid: this.courseID,
+						            username: item.username,
+						          }
+						        })
+						        .then(res => {
+						            this.courseDetails.studentList.splice(i,1)
+									this.$Message.info('delete ok');
+						          })
 					},
 					onCancel: () => {
 						this.$Message.info('delete cancel');
@@ -295,7 +319,6 @@
 			},
 			submitCourseModify() {
 				//interface check: 修改课程信息(courseid,title,intro)
-				//simulate
 				axios.get(GLOBAL.URL+'/modifyCourseInfo', {
 				          params: {
 				            courseid: this.courseID,
@@ -326,87 +349,134 @@
 				          })
 				this.courseNoticeModifyVisible = false;
 			},
-			homeworkModify(item){
+			homeworkModify(item,i){
 				console.log(item)
 				this.update1 =item.tasktitle
 				this.update2 =item.taskintro
 				this.update3 =item.taskid
+				this.update4=i
 				this.homeworkModifyVisible = true;
 			},
 			homeworkModifySubmit(){
 				//interface check: 修改作业信息(courseid,taskid,tasktitle，taskinfo)
-				//simulate
-				this.courseDetails.task[this.update3-1].taskTitle = this.update1
-				this.courseDetails.task[this.update3-1].taskIntro=this.update2
+				axios.get(GLOBAL.URL+'/modifyTaskInfo', {
+				          params: {
+				            taskid: this.update3,
+							tasktitle:this.update1,
+							taskintro:this.update2
+				          }
+				        })
+				        .then(res => {
+							console.log(this.update4)
+				            this.courseDetails.task[this.update4].tasktitle = this.update1
+				            this.courseDetails.task[this.update4].taskintro=this.update2
+							this.$Message.success('作业信息已更新');
+				          })
 				this.homeworkModifyVisible = false;
 			},
 			submitShowPersonal(item){
 				this.update1 =item.username
 				//interface check: 获取某人在某课程的所有作业的提交情况(courseid,username)
-				//simulate
-				this.update3=[{
-					taskTitle:"作业一 R301压枪教学",
-					commit:'感觉不如3030····近战'
-				},
-				{
-					taskTitle:"作业二 凤凰打电教学",
-					commit:'学会了 就是队友死太快了'
-				},
-				{
-					taskTitle:"作业四 决赛圈的终极一战处理",
-					commit:'打不到决赛圈怎么办 老师'
-				},
-				]
-				this.submitVisiblePersonal = true;
+				axios.get(GLOBAL.URL+'/getSbsubmit', {
+				          params: {
+				            courseid: this.courseID,
+				            username: item.username,
+				          }
+				        })
+				        .then(res => {
+				            this.update3=res.data;
+							console.log(res.data)
+							this.submitVisiblePersonal = true
+							// this.update3=[{
+							// 	taskTitle:"作业一 R301压枪教学",
+							// 	commit:'感觉不如3030····近战'
+							// },
+							// {
+							// 	taskTitle:"作业二 凤凰打电教学",
+							// 	commit:'学会了 就是队友死太快了'
+							// },
+							// {
+							// 	taskTitle:"作业四 决赛圈的终极一战处理",
+							// 	commit:'打不到决赛圈怎么办 老师'
+							// },
+							// ]
+				          })
 			},
 			submitShow(item){
 				this.update1 =item.tasktitle
 				this.update2 =item.taskintro
 				this.update3 =item.taskid
 				//interface check: 获取某作业的提交情况(courseid,taskid)
-				//simulate
-				this.update3=[{
-					username:'十年老OP',
-					content:"感觉不如原神。。。画质"
-				},
-				{
-					username:'火烧俱乐部',
-					content:"我宣布直播间由白字占领！！"
-				},
-				{
-					username:'Sally哥',
-					content:"Sally哥来了全杀了"
-				},
-				]
-				this.submitVisible = true;
+				axios.get(GLOBAL.URL+'/taskSubmit', {
+				          params: {
+				            taskid: item.taskid,
+				          }
+				        })
+				        .then(res => {
+							console.log(res.data)
+				            this.update3=res.data;
+							// [{
+				   //          	username:'十年老OP',
+				   //          	content:"感觉不如原神。。。画质"
+				   //          },
+				   //          {
+				   //          	username:'火烧俱乐部',
+				   //          	content:"我宣布直播间由白字占领！！"
+				   //          },
+				   //          {
+				   //          	username:'Sally哥',
+				   //          	content:"Sally哥来了全杀了"
+				   //          },
+				   //          ]
+				            this.submitVisible = true;
+				          })
 			},
 			createHomework(){
-				//  interface check: 新建作业( username ，courseId,taskname,taskIntro )  简化版本 安全考虑应该username存在vuex中防止修改 懒得改了
-				//simulate
-				var taskId='233'
-				this.courseDetails.task.push({
-					taskid: taskId,
-					tasktitle: this.update1,
-					taskintro: this.update2,
-					iconSrc: require('../../assets/ran' + (Math.floor(Math.random() * 4) + 1) + '.png')
-				})
-				this.$Message.success('创建作业成功！');
+				//  interface check: 新建作业( username ，courseId,taskname,taskIntro )  
+				axios.get(GLOBAL.URL+'/createTask', {
+				          params: {
+				            username: localStorage.getItem("username"),
+				            courseId: this.courseID,
+							taskname:this.update1,
+							taskIntro:this.update2,
+				          }
+				        })
+				        .then(res => {
+				            var taskId=res.data
+				            this.courseDetails.task.push({
+				            	taskid: taskId,
+				            	tasktitle: this.update1,
+				            	taskintro: this.update2,
+				            	iconSrc: require('../../assets/ran' + (Math.floor(Math.random() * 4) + 1) + '.png')
+				            })
+				            this.$Message.success('创建作业成功！');
+				          })
 			},
 			submitHomework(item,i){
-				this.update1=item.taskId;
-				this.update2=item.taskTitle;
-				this.update3=item.taskIntro;
+				this.update1=item.taskid;
+				this.update2=item.tasktitle;
+				this.update3=item.taskintro;
 				this.update5=i;
 				console.log(this.update5);
 				this.submitHwVisible=true;  
 			},
 			submitHomeworkOver(){
 				//  interface check: 学生提交作业( username ，courseId,taskId,content=this.update4 )  
-				//simulate
-				var res=1 //提交成功
-				this.courseDetails.task[this.update5]['status']=require('../../assets/complete.png');
-				this.submitHwVisible=false;  
-				this.$Message.success('提交作业成功！');
+				console.log(this.courseDetails)
+				axios.get(GLOBAL.URL+'/submitTask', {
+				          params: {
+				            username: localStorage.getItem("username"),
+							taskId:this.update1,
+							submit:this.update4
+				          }
+				        })
+				        .then(res => {
+				            var res=1 //提交成功
+				            this.courseDetails.task[this.update5]['status']=require('../../assets/complete.png');
+				            this.submitHwVisible=false;  
+				            this.$Message.success('提交作业成功！');
+				          })
+				         
 			}
 		},
 		computed: {
@@ -421,6 +491,15 @@
 			}
 		},
 		mounted() {
+			// axios.get(GLOBAL.URL+'/errorTest', {
+			//           params: {
+			//             username: values['username'],
+			//             password: values['password'],
+			//           }
+			//         })
+			//         .then(res => {
+			            
+			//           })
 			console.log(this.$route.query.courseid)
 			this.$message.success(this.$route.query.courseid);
 			this.courseID = this.$route.query.courseid;
