@@ -154,7 +154,7 @@ this.courseDetails = {
 查询某username对应某courseId 下 指定taskList的作业提交状态（已提交1，未提交0 ，已打分*）  
 返回同样也是对应的状态list[1,0,1```]  
 
-- **学生提交作业( username ，courseId,taskId,content )**  
+-OK **学生提交作业( username ，courseId,taskId,content )**  
 - 只会在身份是学生时调用   
 某学生提交某课程某task的文本作业    
 返回提交状态  
