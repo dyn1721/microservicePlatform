@@ -1,13 +1,23 @@
 <template>
   <div class="table-data">
     <a-card :title="tableName + ' 查看数据'">
-      <a-table :columns="tableColumns" :data-source="tableData" rowKey="id" :scroll="{ x: tableFields.length * 150, y: 350 }">
+      <a-table
+          :columns="tableColumns"
+          :data-source="tableData"
+          rowKey="_id"
+          :scroll="{ x: tableFields.length * 150, y: 350 }"
+          :pagination="false">
         <span slot="action" slot-scope="text, record">
           <a @click="showModify = true; currentRecord = record;">修改</a>
           <a-divider type="vertical"/>
           <a @click="showDelete = true; currentRecord = record;">删除</a>
         </span>
       </a-table>
+      <a-pagination
+          v-model="currentPage"
+          :total="totalPage * 10"
+          @change="handlePageChange"
+          style="text-align: right; margin-top: 10px;" />
     </a-card>
     <a-modal
         title="修改记录"
@@ -39,7 +49,7 @@
 </template>
 
 <script>
-import {Card, Icon, Input, Table, Divider, FormModel, Modal} from "ant-design-vue";
+import {Card, Icon, Input, Table, Divider, FormModel, Modal, Pagination} from "ant-design-vue";
 import {DjangoURL} from '../../main';
 
 export default {
@@ -52,6 +62,8 @@ export default {
       showDelete: false,
       currentRecord: {},
       oldBaseURL: '',
+      currentPage: 1,
+      totalPage: 1,
     }
   },
   mounted() {
@@ -65,13 +77,8 @@ export default {
         .catch((err) => {
           this.$message.error('获取表模式失败');
         });
-    this.axios.get(`/tables/${this.tableName}/records?pageSize=10&pageIdx=0`)
-        .then((res) => {
-          this.tableData = res.data.tableData;
-        })
-        .catch((err) => {
-          this.$message.error('获取表数据失败');
-        });
+    this.fetchRecords();
+    this.fetchTotalPage();
   },
   destroyed() {
     this.axios.defaults.baseURL = this.oldBaseURL;
@@ -94,11 +101,23 @@ export default {
         width: 110,
       });
       return columns;
-    }
+    },
   },
   methods: {
+    handlePageChange(page, pageSize) {
+      this.fetchRecords();
+    },
+    fetchTotalPage() {
+      this.axios.get(`/tables/${this.tableName}/page?pageSize=10`)
+          .then((res) => {
+            this.totalPage = res.data.totalPage;
+          })
+          .catch((err) => {
+            this.$message.error('获取总页数失败');
+          });
+    },
     fetchRecords() {
-      this.axios.get(`/tables/${this.tableName}/records?pageSize=10&pageIdx=0`)
+      this.axios.get(`/tables/${this.tableName}/records?pageSize=10&pageIdx=${this.currentPage - 1}`)
           .then((res) => {
             this.tableData = res.data.tableData;
           })
@@ -121,6 +140,7 @@ export default {
       this.axios.delete(`/tables/${this.tableName}/records/${this.currentRecord._id}`)
           .then((res) => {
             this.$message.success('删除数据成功');
+            this.fetchTotalPage();
             this.fetchRecords();
             this.showDelete = false;
           })
@@ -141,6 +161,7 @@ export default {
     AFormModel: FormModel,
     AFormModelItem: FormModel.Item,
     AModal: Modal,
+    APagination: Pagination,
   }
 }
 </script>
