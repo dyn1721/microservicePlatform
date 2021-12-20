@@ -2,16 +2,22 @@
   <div class="system-log">
     <h2 style="margin-bottom: 10px;">
       后端控制台输出
-<!--      <a-icon type="loading" v-if="loading" />-->
-      <a-divider type="vertical" />
-      <a @click="startLog()" v-if="interval === null"><a-icon type="play-circle" /></a>
-      <a-icon type="play-circle" v-else />
-      <a-divider type="vertical" />
-      <a @click="stopLog()" v-if="interval !== null"><a-icon type="pause-circle" /></a>
-      <a-icon type="pause-circle" v-else />
-      <a-divider type="vertical" />
-      <a @click="logContent = ''" v-if="logContent"><a-icon type="stop" /></a>
-      <a-icon type="stop" v-else />
+      <!--      <a-icon type="loading" v-if="loading" />-->
+      <a-divider type="vertical"/>
+      <a @click="startLog()" v-if="interval === null">
+        <a-icon type="play-circle"/>
+      </a>
+      <a-icon type="play-circle" v-else/>
+      <a-divider type="vertical"/>
+      <a @click="stopLog()" v-if="interval !== null">
+        <a-icon type="pause-circle"/>
+      </a>
+      <a-icon type="pause-circle" v-else/>
+      <a-divider type="vertical"/>
+      <a @click="logContent = ''" v-if="logContent">
+        <a-icon type="stop"/>
+      </a>
+      <a-icon type="stop" v-else/>
     </h2>
     <pre class="log-content">{{ logContent }}</pre>
   </div>
@@ -19,7 +25,7 @@
 
 <script>
 import {Row, Col, Button, Icon, Divider} from "ant-design-vue";
-import {DjangoURL} from '../../main';
+import {DjangoURL} from '@/main';
 
 export default {
   name: 'system-log',

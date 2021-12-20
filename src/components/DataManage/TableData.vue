@@ -17,7 +17,7 @@
           v-model="currentPage"
           :total="totalPage * 10"
           @change="handlePageChange"
-          style="text-align: right; margin-top: 10px;" />
+          style="text-align: right; margin-top: 10px;"/>
     </a-card>
     <a-modal
         title="修改记录"

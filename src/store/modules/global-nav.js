@@ -2,29 +2,29 @@ import {menuNav} from '@/api/menu'
 
 // 从服务端获取 子页面以及路径
 const mock = [
-  {
-    "id": "1044886626813353984",
-    "parentId": "0",
-    "name": "dashboard",
-    "path": '/dashboard',
-    "icon": 'dashboard',
-    "leaf": false,
-    "children": [{
-      "id": "1044886629921333248",
-      "parentId": "1044886626813353984",
-      "name": "analysis",
-      "path": '/dashboard/analysis',
-      "leaf": true,
-      "children": []
-    }, {
-      "id": "1044886629921333248",
-      "parentId": "1044886626813353984",
-      "name": "workplace",
-      "path": '/dashboard/workplace',
-      "leaf": true,
-      "children": []
-    }]
-  },
+  // {
+  //   "id": "1044886626813353984",
+  //   "parentId": "0",
+  //   "name": "dashboard",
+  //   "path": '/dashboard',
+  //   "icon": 'dashboard',
+  //   "leaf": false,
+  //   "children": [{
+  //     "id": "1044886629921333248",
+  //     "parentId": "1044886626813353984",
+  //     "name": "analysis",
+  //     "path": '/dashboard/analysis',
+  //     "leaf": true,
+  //     "children": []
+  //   }, {
+  //     "id": "1044886629921333248",
+  //     "parentId": "1044886626813353984",
+  //     "name": "workplace",
+  //     "path": '/dashboard/workplace',
+  //     "leaf": true,
+  //     "children": []
+  //   }]
+  // },
   {
     "id": "1044886626813353984",
     "parentId": "0",
@@ -46,13 +46,15 @@ const mock = [
         "name": "data",
         "path": "/system/data",
         "leaf": true,
-      }, {
-        "id": "1044886629921333248",
-        "parentId": "1044886626813353984",
-        "name": "role",
-        "path": "/system/role",
-        "leaf": true,
-      }]
+      },
+      // {
+      //   "id": "1044886629921333248",
+      //   "parentId": "1044886626813353984",
+      //   "name": "role",
+      //   "path": "/system/role",
+      //   "leaf": true,
+      // }
+      ]
   },
   {
     "id": "1044886626813353984",

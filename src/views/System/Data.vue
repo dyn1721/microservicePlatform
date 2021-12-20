@@ -25,9 +25,9 @@
 
 <script>
 import {Row, Col, Card, List, Button, Icon, Avatar} from "ant-design-vue";
-import {DjangoURL} from '../../main';
-import TableData from "../../components/DataManage/TableData.vue";
-import AddRecord from "../../components/DataManage/AddRecord.vue";
+import {DjangoURL} from '@/main';
+import TableData from "@/components/DataManage/TableData.vue";
+import AddRecord from "@/components/DataManage/AddRecord.vue";
 
 export default {
   data() {

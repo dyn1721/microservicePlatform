@@ -35,7 +35,7 @@
 
 <script>
 import {mapGetters} from "vuex";
-import {Tooltip, Icon, Dropdown, Menu, Avatar, Modal, Divider} from "ant-design-vue";
+import {Tooltip, Icon, Dropdown, Menu, Avatar, Divider} from "ant-design-vue";
 import NoticeIcon from "@/components/NoticeIcon"
 import SettingDrawer from "@/components/SettingDrawer"
 

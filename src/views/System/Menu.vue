@@ -1,13 +1,14 @@
 <template>
-    <a-page-header-wrapper>
+  <a-page-header-wrapper>
     menu
-    
-    </a-page-header-wrapper>
+
+  </a-page-header-wrapper>
 </template>
 
 <script>
-import { Avatar, Row, Col, Card, List } from "ant-design-vue";
+import {Avatar, Row, Col, Card, List} from "ant-design-vue";
 import PageHeaderWrapper from "@/components/PageHeaderWrapper";
+
 export default {
   data: () => ({
     tabList: [
@@ -31,10 +32,10 @@ export default {
     ACardMeta: Card.Meta,
     AList: List
   },
-  methods:{
-      tabChange(e){
-          console.log(e);
-      }
+  methods: {
+    tabChange(e) {
+      console.log(e);
+    }
   }
 };
 </script>

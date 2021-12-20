@@ -2,14 +2,14 @@
 // 基础配置文件
 const path = require('path')
 const webpack = require('webpack')
+
 // 拼接路径
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
+
 // 基础路径 注意发布之前要先修改这里
-const BASE_URL = process.env.NODE_ENV === 'production'
-  ? '/seed-workbench-ui/'
-  : '/'
+const BASE_URL = '/'
 module.exports = {
   baseUrl: BASE_URL, // 根据你的实际情况更改这里
   productionSourceMap: false,

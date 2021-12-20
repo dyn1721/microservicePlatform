@@ -79,7 +79,8 @@
 
 <script>
 import axios from 'axios';
-import GLOBAL from '../global.js';
+import GLOBAL from '@/views/global';
+
 import {
   Popover,
   Progress,
@@ -109,33 +110,24 @@ export default {
   computed: {
     ...mapGetters({autoLoginKey: "global/AutoLoginChecking"}),
   },
-   components: {
-      AForm: Form,
-      AFormItem: Form.Item,
-      ATabs: Tabs,
-      ATabPane: Tabs.TabPane,
-      AButton: Button,
-      ACheckbox: Checkbox,
-      AInput: Input,
-      AIcon: Icon,
-      ARow: Row,
-      ACol: Col,
-      ASendCaptchaButton: SendCaptchaButton,  
-	  AForm: Form,
-	  AFormItem: Form.Item,
-	  AButton: Button,
-	  ACheckbox: Checkbox,
-	  AInput: Input,
-	  AInputGroup: Input.Group,
-	      AIcon: Icon,
-	      ARow: Row,
-	      ACol: Col,
-	      ASendCaptchaButton: SendCaptchaButton,
-	      APopover: Popover,
-	      AProgress: Progress,
-	      ASelect: Select,
-	      ASelectOption: Select.Option
-    },
+  components: {
+    AForm: Form,
+    AFormItem: Form.Item,
+    ATabs: Tabs,
+    ATabPane: Tabs.TabPane,
+    AButton: Button,
+    ACheckbox: Checkbox,
+    AInput: Input,
+    AIcon: Icon,
+    ARow: Row,
+    ACol: Col,
+    ASendCaptchaButton: SendCaptchaButton,
+    AInputGroup: Input.Group,
+    APopover: Popover,
+    AProgress: Progress,
+    ASelect: Select,
+    ASelectOption: Select.Option
+  },
   methods: {
     onSwithAutoLogin(e) {
       this.autoLogin = e.target.checked;
